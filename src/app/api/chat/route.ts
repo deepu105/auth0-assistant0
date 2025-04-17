@@ -9,12 +9,32 @@ import { GmailSearch } from '@langchain/community/tools/gmail';
 import { GmailCreateDraft } from '@langchain/community/tools/gmail';
 import { GoogleCalendarCreateTool, GoogleCalendarViewTool } from '@langchain/community/tools/google_calendar';
 
-import { getGoogleAccessToken } from '@/lib/auth0';
+// import { getGoogleAccessToken } from '@/lib/auth0';
+import { getAccessTokenForConnection } from '@auth0/ai-langchain';
+import { Auth0AI } from '@auth0/ai-langchain';
+
 import { convertVercelMessageToLangChainMessage } from '@/utils/message-converters';
 import { logToolCallsInDevelopment } from '@/utils/stream-logging';
+import { DynamicStructuredTool } from '@langchain/core/tools';
 
 const AGENT_SYSTEM_TEMPLATE = `You are a personal assistant named Assistant0. You are a helpful assistant that can answer questions and help with tasks. You have access to a set of tools, use the tools as needed to answer the user's question. Render the email body as a markdown block, do not wrap it in code blocks.`;
 
+const auth0AI = new Auth0AI();
+
+const withGoogleConnection = auth0AI.withTokenForConnection({
+  connection: 'google-oauth2',
+  scopes: [
+    'https://www.googleapis.com/auth/calendar',
+    'https://www.googleapis.com/auth/calendar.events',
+    'https://mail.google.com/',
+  ],
+});
+
+const getGoogleAccessToken = async () => {
+  // Get the access token via Auth0
+  const credentials = getAccessTokenForConnection();
+  return credentials?.accessToken!;
+};
 /**
  * This handler initializes and calls an tool calling ReAct agent.
  * See the docs for more information:
@@ -37,16 +57,18 @@ export async function POST(req: NextRequest) {
       temperature: 0,
     });
 
-    // Get the access token via Auth0
-    const accessToken = await getGoogleAccessToken();
-
     // Provide the access token to the Gmail tools
     const gmailParams = {
-      credentials: { accessToken },
+      credentials: {
+        accessToken: getGoogleAccessToken,
+      },
     };
 
     const googleCalendarParams = {
-      credentials: { accessToken, calendarId: 'primary' },
+      credentials: {
+        accessToken: getGoogleAccessToken,
+        calendarId: 'primary',
+      },
       model: llm,
     };
 
@@ -54,10 +76,10 @@ export async function POST(req: NextRequest) {
       new Calculator(),
       // Requires process.env.SERPAPI_API_KEY to be set: https://serpapi.com/
       new SerpAPI(),
-      new GmailSearch(gmailParams),
-      new GmailCreateDraft(gmailParams),
-      new GoogleCalendarCreateTool(googleCalendarParams),
-      new GoogleCalendarViewTool(googleCalendarParams),
+      withGoogleConnection(new GmailSearch(gmailParams) as unknown as DynamicStructuredTool),
+      withGoogleConnection(new GmailCreateDraft(gmailParams) as unknown as DynamicStructuredTool),
+      withGoogleConnection(new GoogleCalendarCreateTool(googleCalendarParams) as unknown as DynamicStructuredTool),
+      withGoogleConnection(new GoogleCalendarViewTool(googleCalendarParams) as unknown as DynamicStructuredTool),
     ];
     /**
      * Use a prebuilt LangGraph agent.
