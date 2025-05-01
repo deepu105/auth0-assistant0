@@ -9,6 +9,7 @@ import { useQueryState } from 'nuqs';
 import { useStream } from '@langchain/langgraph-sdk/react';
 import { type Message } from '@langchain/langgraph-sdk';
 
+import { FederatedConnectionInterruptHandler } from '@/components/auth0-ai/FederatedConnections/FederatedConnectionInterruptHandler';
 import { ChatMessageBubble } from '@/components/ChatMessageBubble';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
@@ -154,11 +155,16 @@ export function ChatWindow(props: {
           chat.messages.length === 0 ? (
             <div>{props.emptyStateComponent}</div>
           ) : (
-            <ChatMessages
-              aiEmoji={props.emoji}
-              messages={chat.messages}
-              emptyStateComponent={props.emptyStateComponent}
-            />
+            <>
+              <ChatMessages
+                aiEmoji={props.emoji}
+                messages={chat.messages}
+                emptyStateComponent={props.emptyStateComponent}
+              />
+              <div className="flex flex-col max-w-[768px] mx-auto pb-12 w-full">
+                <FederatedConnectionInterruptHandler interrupt={chat.interrupt} onFinish={() => chat.submit(null)} />
+              </div>
+            </>
           )
         }
         footer={
