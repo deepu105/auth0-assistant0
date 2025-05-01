@@ -1,13 +1,14 @@
 import './globals.css';
 import { Roboto_Mono, Inter } from 'next/font/google';
 import Image from 'next/image';
-import { Github, LogOut } from 'lucide-react';
+import { Github } from 'lucide-react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { ActiveLink } from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/sonner';
 import { auth0 } from '@/lib/auth0';
+import UserButton from '@/components/auth0/user-button';
 
 const robotoMono = Roboto_Mono({ weight: '400', subsets: ['latin'] });
 const publicSans = Inter({ weight: '400', subsets: ['latin'] });
@@ -53,15 +54,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               </div>
               <div className="flex justify-center">
                 {session && (
-                  <>
-                    <div className="flex items-center gap-2 px-4 text-white">Welcome, {session?.user?.name}!</div>
-                    <Button asChild variant="destructive" size="default" className="mx-2">
-                      <a href="/auth/logout" className="flex items-center gap-2">
-                        <LogOut />
-                        <span>Logout</span>
-                      </a>
-                    </Button>
-                  </>
+                  <div className="flex items-center gap-2 px-4 text-white">
+                    <UserButton user={session?.user!} logoutUrl="/auth/logout" />
+                  </div>
                 )}
                 <Button asChild variant="header" size="default">
                   <a href="https://github.com/oktadev/auth0-assistant0" target="_blank">
