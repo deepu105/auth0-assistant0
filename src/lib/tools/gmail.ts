@@ -2,7 +2,7 @@ import { tool } from 'ai';
 import { z } from 'zod';
 import { GmailCreateDraft, GmailSearch } from '@langchain/community/tools/gmail';
 
-import { getAccessToken } from '../auth0-ai';
+import { getAccessToken, withGoogleConnection } from '../auth0-ai';
 
 // Provide the access token to the Gmail tools
 const gmailParams = {
@@ -13,32 +13,36 @@ const gmailParams = {
 
 const gmailSearch = new GmailSearch(gmailParams);
 
-export const gmailSearchTool = tool({
-  description: gmailSearch.description,
-  parameters: z.object({
-    query: z.string(),
-    maxResults: z.number().optional(),
-    resource: z.enum(['messages', 'threads']).optional(),
+export const gmailSearchTool = withGoogleConnection(
+  tool({
+    description: gmailSearch.description,
+    parameters: z.object({
+      query: z.string(),
+      maxResults: z.number().optional(),
+      resource: z.enum(['messages', 'threads']).optional(),
+    }),
+    execute: async (args) => {
+      const result = await gmailSearch._call(args);
+      return result;
+    },
   }),
-  execute: async (args) => {
-    const result = await gmailSearch._call(args);
-    return result;
-  },
-});
+);
 
 const gmailDraft = new GmailCreateDraft(gmailParams);
 
-export const gmailDraftTool = tool({
-  description: gmailDraft.description,
-  parameters: z.object({
-    message: z.string(),
-    to: z.array(z.string()),
-    subject: z.string(),
-    cc: z.array(z.string()).optional(),
-    bcc: z.array(z.string()).optional(),
+export const gmailDraftTool = withGoogleConnection(
+  tool({
+    description: gmailDraft.description,
+    parameters: z.object({
+      message: z.string(),
+      to: z.array(z.string()),
+      subject: z.string(),
+      cc: z.array(z.string()).optional(),
+      bcc: z.array(z.string()).optional(),
+    }),
+    execute: async (args) => {
+      const result = await gmailDraft._call(args);
+      return result;
+    },
   }),
-  execute: async (args) => {
-    const result = await gmailDraft._call(args);
-    return result;
-  },
-});
+);

@@ -4,7 +4,6 @@ import { openai } from '@ai-sdk/openai';
 import { setAIContext } from '@auth0/ai-vercel';
 import { errorSerializer, withInterruptions } from '@auth0/ai-vercel/interrupts';
 
-import { withAsyncAuthorization, withGoogleConnection } from '@/lib/auth0-ai';
 import { serpApiTool } from '@/lib/tools/serpapi';
 import { getUserInfoTool } from '@/lib/tools/user-info';
 import { gmailDraftTool, gmailSearchTool } from '@/lib/tools/gmail';
@@ -33,10 +32,10 @@ export async function POST(req: NextRequest) {
   const tools = {
     serpApiTool,
     getUserInfoTool,
-    gmailSearch: withGoogleConnection(gmailSearchTool),
-    gmailDraft: withGoogleConnection(gmailDraftTool),
-    checkUsersCalendar: withGoogleConnection(checkUsersCalendarTool),
-    shopOnline: withAsyncAuthorization(shopOnlineTool),
+    gmailSearchTool,
+    gmailDraftTool,
+    checkUsersCalendarTool,
+    shopOnlineTool,
   };
 
   return createDataStreamResponse({
