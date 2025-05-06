@@ -6,6 +6,7 @@ import { errorSerializer, withInterruptions } from '@auth0/ai-vercel/interrupts'
 
 import { withAsyncAuthorization, withGoogleConnection } from '@/lib/auth0-ai';
 import { serpApiTool } from '@/lib/tools/serpapi';
+import { getUserInfoTool } from '@/lib/tools/user-info';
 import { gmailDraftTool, gmailSearchTool } from '@/lib/tools/gmail';
 import { checkUsersCalendarTool } from '@/lib/tools/google-calender';
 import { shopOnlineTool } from '@/lib/tools/shop-online';
@@ -31,6 +32,7 @@ export async function POST(req: NextRequest) {
 
   const tools = {
     serpApiTool,
+    getUserInfoTool,
     gmailSearch: withGoogleConnection(gmailSearchTool),
     gmailDraft: withGoogleConnection(gmailDraftTool),
     checkUsersCalendar: withGoogleConnection(checkUsersCalendarTool),
