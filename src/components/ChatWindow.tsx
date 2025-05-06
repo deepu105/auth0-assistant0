@@ -1,13 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { type Message } from 'ai';
+import { useChat } from '@ai-sdk/react';
 import type { FormEvent, ReactNode } from 'react';
 import { toast } from 'sonner';
 import { StickToBottom, useStickToBottomContext } from 'use-stick-to-bottom';
 import { ArrowDown, ArrowUpIcon, LoaderCircle } from 'lucide-react';
-import { useQueryState } from 'nuqs';
-import { useStream } from '@langchain/langgraph-sdk/react';
-import { type Message } from '@langchain/langgraph-sdk';
+import { useInterruptions } from '@auth0/ai-vercel/react';
 
 import { FederatedConnectionInterruptHandler } from '@/components/auth0-ai/FederatedConnections/FederatedConnectionInterruptHandler';
 import { ChatMessageBubble } from '@/components/ChatMessageBubble';
@@ -65,7 +64,6 @@ function ChatInput(props: {
           placeholder={props.placeholder}
           onChange={props.onChange}
           className="border-none outline-none bg-transparent p-4"
-          autoFocus
         />
 
         <div className="flex justify-between ml-4 mr-2 mb-2">
@@ -114,36 +112,24 @@ export function ChatWindow(props: {
   placeholder?: string;
   emoji?: string;
 }) {
-  const [threadId, setThreadId] = useQueryState('threadId');
-  const [input, setInput] = useState('');
-  const chat = useStream({
-    apiUrl: props.endpoint,
-    assistantId: 'agent',
-    threadId,
-
-    onThreadId: setThreadId,
-    onError: (e: any) => {
-      console.error('Error: ', e);
-      toast.error(`Error while processing your request`, { description: e.message });
-    },
-  });
+  const chat = useInterruptions((handler) =>
+    useChat({
+      api: props.endpoint,
+      onError: handler((e: Error) => {
+        console.error('Error: ', e);
+        toast.error(`Error while processing your request`, { description: e.message });
+      }),
+    }),
+  );
 
   function isChatLoading(): boolean {
-    return chat.isLoading;
+    return chat.status === 'streaming';
   }
 
   async function sendMessage(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (isChatLoading()) return;
-    chat.submit(
-      { messages: [{ type: 'human', content: input }] },
-      {
-        optimisticValues: (prev) => ({
-          messages: [...((prev?.messages as []) ?? []), { type: 'human', content: input, id: 'temp' }],
-        }),
-      },
-    );
-    setInput('');
+    chat.handleSubmit(e);
   }
 
   return (
@@ -162,7 +148,7 @@ export function ChatWindow(props: {
                 emptyStateComponent={props.emptyStateComponent}
               />
               <div className="flex flex-col max-w-[768px] mx-auto pb-12 w-full">
-                <FederatedConnectionInterruptHandler interrupt={chat.interrupt} onFinish={() => chat.submit(null)} />
+                <FederatedConnectionInterruptHandler interrupt={chat.toolInterrupt} />
               </div>
             </>
           )
@@ -171,8 +157,8 @@ export function ChatWindow(props: {
           <div className="sticky bottom-8 px-2">
             <ScrollToBottom className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4" />
             <ChatInput
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
+              value={chat.input}
+              onChange={chat.handleInputChange}
               onSubmit={sendMessage}
               loading={isChatLoading()}
               placeholder={props.placeholder ?? 'What can I help you with?'}

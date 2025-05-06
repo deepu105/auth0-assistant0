@@ -1,5 +1,6 @@
-import { Auth0AI } from '@auth0/ai-langchain';
-import { getAccessTokenForConnection } from '@auth0/ai-langchain';
+import { Auth0AI, getAccessTokenForConnection } from '@auth0/ai-vercel';
+
+import { getRefreshToken } from './auth0';
 
 // Get the access token for a connection via Auth0
 export const getAccessToken = async () => getAccessTokenForConnection();
@@ -14,4 +15,6 @@ export const withGoogleConnection = auth0AI.withTokenForConnection({
     'https://www.googleapis.com/auth/gmail.compose',
     'https://www.googleapis.com/auth/calendar.events',
   ],
+  refreshToken: getRefreshToken,
+  credentialsContext: 'tool-call',
 });
