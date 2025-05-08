@@ -73,7 +73,7 @@ export default function DocumentItemActions({ doc, onActionComplete }: DocumentI
   const handleDeleteConfirm = async () => {
     setIsProcessing(true);
     try {
-      await deleteDocument(doc.id);
+      await deleteDocument(doc.id, doc.userEmail);
       toast.success(`${doc.fileName} deleted successfully.`);
       onActionComplete(); // Trigger revalidation
     } catch (error) {

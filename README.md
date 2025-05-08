@@ -58,6 +58,8 @@ Next, you'll need to set up environment variables in your repo's `.env.local` fi
 - To start with the examples, you'll just need to add your OpenAI API key and Auth0 credentials for the Web app and Machine to Machine App.
   - You can setup a new Auth0 tenant with an Auth0 Web App and Token Vault following the Prerequisites instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
   - You can setup a new Auth0 Machine to Machine App with Async Authorizations enabled following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
+  - An Auth0 FGA account, you can create one [here](https://dashboard.fga.dev). Add the FGA store ID, client ID, client secret, and API URL to the `.env.local` file.
+  - Optionally add a [SerpAPI](https://serpapi.com/) API key for using web search tool.
 
 Next, install the required packages using your preferred package manager and initialize the database.
 

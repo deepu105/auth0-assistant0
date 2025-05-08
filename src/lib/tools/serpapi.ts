@@ -4,6 +4,7 @@ import { SerpAPI } from '@langchain/community/tools/serpapi';
 
 const serpApi = new SerpAPI();
 
+// Requires process.env.SERPAPI_API_KEY to be set: https://serpapi.com/
 export const serpApiTool = tool({
   description: serpApi.description,
   parameters: z.object({

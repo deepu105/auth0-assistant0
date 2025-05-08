@@ -1,12 +1,12 @@
 import { Toaster } from 'sonner';
 import { revalidatePath } from 'next/cache';
 import { format } from 'date-fns';
+import { ReactNode } from 'react';
 
 import { auth0 } from '@/lib/auth0';
-import DocumentUploadForm from '@/components/document-upload-form';
 import { getDocumentsForUser } from '@/lib/actions/documents';
+import DocumentUploadForm from '@/components/document-upload-form';
 import DocumentItemActions from '@/components/document-item-actions';
-import { ReactNode } from 'react';
 
 export default async function DocumentsPage() {
   const session = await auth0.getSession();

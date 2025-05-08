@@ -7,9 +7,10 @@ import {
   documents as documentsTable,
   DocumentParams,
 } from '@/lib/db/schema/documents';
-import { db } from '../db';
-import { generateEmbeddings } from '../rag/embedding';
-import { embeddings as embeddingsTable } from '../db/schema/embeddings';
+import { db } from '@/lib/db';
+import { generateEmbeddings } from '@/lib/rag/embedding';
+import { embeddings as embeddingsTable } from '@/lib/db/schema/embeddings';
+import { addRelation, deleteRelation } from '@/lib/fga/fga';
 
 export const createDocument = async (input: NewDocumentParams, text: string) => {
   const { content, fileName, fileType, userId, userEmail, sharedWith } = insertDocumentSchema.parse(input);
@@ -29,6 +30,9 @@ export const createDocument = async (input: NewDocumentParams, text: string) => 
         ...embedding,
       })),
     );
+
+    // write the relationship tuples to FGA
+    await addRelation(userEmail, document.id);
   }
 
   return true;
@@ -82,8 +86,24 @@ export async function shareDocument(documentId: string, sharedWith: string[]) {
     .where(eq(documentsTable.id, documentId));
   const mergedSharedWith = [...currentSharedWith[0]?.sharedWith, ...sharedWith];
   await db.update(documentsTable).set({ sharedWith: mergedSharedWith }).where(eq(documentsTable.id, documentId));
+  // write the relationship tuples to FGA
+  for (const user of sharedWith) {
+    await addRelation(user, documentId, 'viewer');
+  }
 }
 
-export async function deleteDocument(documentId: string) {
+export async function deleteDocument(documentId: string, userEmail: string) {
+  // delete the relationship tuples from FGA
+  await deleteRelation(userEmail, documentId);
+  const currentSharedWith = await db
+    .select({ sharedWith: documentsTable.sharedWith })
+    .from(documentsTable)
+    .where(eq(documentsTable.id, documentId));
+  // delete the relationship tuples from FGA
+  for (const user of currentSharedWith[0]?.sharedWith) {
+    await deleteRelation(user, documentId, 'viewer');
+  }
+
+  // delete the document from the database
   await db.delete(documentsTable).where(eq(documentsTable.id, documentId));
 }
