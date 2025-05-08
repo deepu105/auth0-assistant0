@@ -10,13 +10,6 @@ import { gmailDraftTool, gmailSearchTool } from '@/lib/tools/gmail';
 import { checkUsersCalendarTool } from '@/lib/tools/google-calender';
 import { shopOnlineTool } from '@/lib/tools/shop-online';
 
-// Vercel AI tends to get stuck when there are incomplete tool calls in messages
-const sanitizeMessages = (messages: Message[]) => {
-  return messages.filter(
-    (message) => !(message.role === 'assistant' && message.parts && message.parts.length > 0 && message.content === ''),
-  );
-};
-
 const AGENT_SYSTEM_TEMPLATE = `You are a personal assistant named Assistant0. You are a helpful assistant that can answer questions and help with tasks. You have access to a set of tools, use the tools as needed to answer the user's question. Render the email body as a markdown block, do not wrap it in code blocks.`;
 
 /**
@@ -64,3 +57,10 @@ export async function POST(req: NextRequest) {
     }),
   });
 }
+
+// Vercel AI tends to get stuck when there are incomplete tool calls in messages
+const sanitizeMessages = (messages: Message[]) => {
+  return messages.filter(
+    (message) => !(message.role === 'assistant' && message.parts && message.parts.length > 0 && message.content === ''),
+  );
+};

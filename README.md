@@ -6,7 +6,7 @@ Assistant0 an AI personal assistant that consolidates your digital life by dynam
 2. **Calendar Management:** By interfacing with your calendar, it can remind you of upcoming meetings, check for scheduling conflicts, and even propose the best time slots for new appointments based on your availability.
 3. **Slack Notifications [coming soon]:** For team communications, the assistant can monitor Slack channels. It identifies key messages and creates action items, ensuring you never miss an important update from your colleagues.
 4. **Google Drive Access [coming soon]:** Whether you need immediate access to the latest project document or a file related to a current task, the assistant retrieves pertinent documents from Google Drive on demand. It can create document summaries and even create documents based on your instructions.
-5. **User Information Retrieval [coming soon]:** The assistant can retrieve information about the user from their authentication profile, including their name, email, and other relevant details.
+5. **User Information Retrieval:** The assistant can retrieve information about the user from their authentication profile, including their name, email, and other relevant details.
 
 With tool-calling capabilities, the possibilities are endless. In this conceptual scenario, the AI agent embodies a digital personal secretary—one that not only processes information but also proactively collates data from connected services to provide comprehensive task management. This level of integration not only enhances efficiency but also ushers in a new era of intelligent automation, where digital assistants serve as reliable, all-in-one solutions that tailor themselves to your personal and professional needs.
 
@@ -32,14 +32,12 @@ Auth0's [Token Vault](https://auth0.com/docs/secure/tokens/token-vault) feature 
 
 ## About the template
 
-This template scaffolds an Auth0 + LangChain.js + Next.js starter app. It mainly uses the following libraries:
+This template scaffolds an Auth0 + Next.js starter app. It mainly uses the following libraries:
 
 - Vercel's [AI SDK](https://github.com/vercel-labs/ai) to handle the AI agent.
 - The [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) and [Auth0 Next.js SDK](https://github.com/auth0/nextjs-auth0) to secure the application and call third-party APIs.
 
 It's Vercel's free-tier friendly too! Check out the [bundle size stats below](#-bundle-size).
-
-You can check out a hosted version of this repo here: //TODO
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/oktadev/auth0-assistant0)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foktadev%2Fauth0-assistant0)
@@ -55,9 +53,9 @@ cd auth0-assistant0
 
 Next, you'll need to set up environment variables in your repo's `.env.local` file. Copy the `.env.example` file to `.env.local`.
 
-You can setup a new Auth0 tenant with Token Vault enabled following the instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
-
-To start with the basic examples, you'll just need to add your OpenAI API key and Auth0 credentials.
+- To start with the examples, you'll just need to add your OpenAI API key and Auth0 credentials for the Web app and Machine to Machine App.
+  - You can setup a new Auth0 tenant with an Auth0 Web App and Token Vault following the Prerequisites instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
+  - You can setup a new Auth0 Machine to Machine App with Async Authorizations enabled following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
 
 Next, install the required packages using your preferred package manager (e.g. `bun install` or `npm install`).
 
