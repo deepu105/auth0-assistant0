@@ -1,7 +1,7 @@
 import { FederatedConnectionInterrupt } from '@auth0/ai/interrupts';
 import type { Auth0InterruptionUI } from '@auth0/ai-vercel/react';
 
-import { EnsureAPIAccess } from '@/components/auth0-ai/FederatedConnections';
+import { EnsureAPIAccess } from '@/components/auth0-ai/federated-connections/ensure-api-access';
 
 interface FederatedConnectionInterruptHandlerProps {
   interrupt: Auth0InterruptionUI | null;
