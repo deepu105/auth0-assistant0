@@ -39,6 +39,8 @@ Auth0's [Asynchronous Authorization](https://auth0.com/ai/docs/async-authorizati
 
 This template scaffolds an Auth0 + Next.js starter app. It mainly uses the following libraries:
 
+> A LangChain/LangGraph version of this template is available on the main branch [here](https://github.com/auth0-samples/auth0-assistant0).
+
 - Vercel's [AI SDK](https://github.com/vercel-labs/ai) to handle the AI agent.
 - The [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) and [Auth0 Next.js SDK](https://github.com/auth0/nextjs-auth0) to secure the application and call third-party APIs.
 
