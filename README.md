@@ -20,22 +20,15 @@ Many current solutions involve storing credentials and secrets in the AI agent a
 
 This is where Auth0 comes to the rescue. As the leading identity provider (IdP) for modern applications, our upcoming product, [Auth for GenAI](https://a0.to/ai-content), provides standardized ways built on top of OAuth and OpenID Connect to call APIs of tools on behalf of the end user from your AI agent.
 
-![Tool calling with Federated API token exchange](https://images.ctfassets.net/23aumh6u8s0i/1gY1jvDgZHSfRloc4qVumu/d44bb7102c1e858e5ac64dea324478fe/tool-calling-with-federated-api-token-exchange.jpg)
-
 Auth0's [Token Vault](https://auth0.com/docs/secure/tokens/token-vault) feature helps broker a secure and controlled handshake between the AI agents and the services you want the agent to interact with on your behalf – in the form of scoped access tokens. This way, the agent and LLM do not have access to the credentials and can only call the tools with the permissions you have defined in Auth0. This also means your AI agent only needs to talk to Auth0 for authentication and not the tools directly, making integrations easier.
 
 Auth0's [Asynchronous Authorization](https://auth0.com/ai/docs/async-authorization) feature allows you to securely implement human-in-the-loop authorizations for tool calling. This uses Client-Initiated Backchannel Authentication (CIBA) to securely implement Asynchronous Authorization.
 
 [Auth0 FGA](https://auth0.com/fine-grained-authorization) provides the final piece of the puzzle by allowing you to define fine-grained access control policies for your tools and RAG pipelines. This allows you to define who can access what tools and what data can be used for RAG.
 
-## Learn more
-
-- [Tool Calling in AI Agents: Empowering Intelligent Automation Securely](https://auth0.com/blog/genai-tool-calling-intro/)
-- [Build an AI Assistant with LangGraph, Vercel, and Next.js: Use Gmail as a Tool Securely](https://auth0.com/blog/genai-tool-calling-build-agent-that-calls-gmail-securely-with-langgraph-vercelai-nextjs/)
-- [Build a Secure LangChain RAG Agent Using Auth0 FGA and LangGraph on Node.js](https://auth0.com/blog/genai-langchain-js-fga/)
-- [Call Other's APIs on User's Behalf](https://auth0.com/ai/docs/call-others-apis-on-users-behalf)
-
 ## About the template
+
+![Tool calling with Federated API token exchange](/public/images/arch-bg.png)
 
 This template scaffolds an Auth0 + Next.js starter app. It mainly uses the following libraries:
 
@@ -43,11 +36,20 @@ This template scaffolds an Auth0 + Next.js starter app. It mainly uses the follo
 
 - Vercel's [AI SDK](https://github.com/vercel-labs/ai) to handle the AI agent.
 - The [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) and [Auth0 Next.js SDK](https://github.com/auth0/nextjs-auth0) to secure the application and call third-party APIs.
+- [Auth0 FGA](https://auth0.com/fine-grained-authorization) to define fine-grained access control policies for your tools and RAG pipelines.
+- Postgres with [Drizzle ORM](https://orm.drizzle.team/) to store the documents and embeddings.
 
 It's Vercel's free-tier friendly too! Check out the [bundle size stats below](#-bundle-size).
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/oktadev/auth0-assistant0)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Foktadev%2Fauth0-assistant0)
+
+## Learn more
+
+- [Tool Calling in AI Agents: Empowering Intelligent Automation Securely](https://auth0.com/blog/genai-tool-calling-intro/)
+- [Build an AI Assistant with LangGraph, Vercel, and Next.js: Use Gmail as a Tool Securely](https://auth0.com/blog/genai-tool-calling-build-agent-that-calls-gmail-securely-with-langgraph-vercelai-nextjs/)
+- [Build a Secure LangChain RAG Agent Using Auth0 FGA and LangGraph on Node.js](https://auth0.com/blog/genai-langchain-js-fga/)
+- [Call Other's APIs on User's Behalf](https://auth0.com/ai/docs/call-others-apis-on-users-behalf)
 
 ## 🚀 Getting Started
 

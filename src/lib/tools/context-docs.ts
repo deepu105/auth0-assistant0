@@ -36,7 +36,6 @@ export const getContextDocumentsTool = tool({
     const documents = await findRelevantContent(question, 25);
     // filter docs based on FGA authorization
     const context = await retriever.filter(documents);
-    console.log(context);
     return context;
   },
 });
