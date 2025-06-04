@@ -20,20 +20,13 @@ export const withGoogleConnection = auth0AI.withTokenForConnection({
   credentialsContext: 'tool-call',
 });
 
-const auth0AIM2M = new Auth0AI({
-  auth0: {
-    clientId: process.env['AUTH0_CLIENT_ID_M2M']!,
-    clientSecret: process.env['AUTH0_CLIENT_SECRET_M2M']!,
-  },
-});
-
 // CIBA flow for user confirmation
-export const withAsyncAuthorization = auth0AIM2M.withAsyncUserConfirmation({
+export const withAsyncAuthorization = auth0AI.withAsyncUserConfirmation({
   userID: async () => {
     const user = await getUser();
     return user?.sub as string;
   },
-  bindingMessage: async ({ product, qty }) => `Do you want to buy ${qty} of ${product}`,
+  bindingMessage: async ({ product, qty }) => `Do you want to buy ${qty} ${product}`,
   scopes: ['openid', 'product:buy'],
   audience: process.env['AUDIENCE']!,
 

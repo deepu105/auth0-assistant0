@@ -10,6 +10,8 @@ Assistant0 an AI personal assistant that consolidates your digital life by dynam
 
 With tool-calling capabilities, the possibilities are endless. In this conceptual scenario, the AI agent embodies a digital personal secretary—one that not only processes information but also proactively collates data from connected services to provide comprehensive task management. This level of integration not only enhances efficiency but also ushers in a new era of intelligent automation, where digital assistants serve as reliable, all-in-one solutions that tailor themselves to your personal and professional needs.
 
+> A LangChain/LangGraph version of this template is available on the main branch [here](https://github.com/auth0-samples/auth0-assistant0).
+
 ### Security Challenges with Tool Calling AI Agents
 
 Building such an assistant is not too difficult. Thanks to frameworks like [LangChain](https://www.langchain.com/), [LlamaIndex](https://www.llamaindex.ai/), and [Vercel AI](https://vercel.com/ai), you can get started quickly. The difficult part is doing it securely so that you can protect the user's data and credentials.
@@ -31,8 +33,6 @@ Auth0's [Asynchronous Authorization](https://auth0.com/ai/docs/async-authorizati
 ![Tool calling with Federated API token exchange](/public/images/arch-bg.png)
 
 This template scaffolds an Auth0 + Next.js starter app. It mainly uses the following libraries:
-
-> A LangChain/LangGraph version of this template is available on the main branch [here](https://github.com/auth0-samples/auth0-assistant0).
 
 - Vercel's [AI SDK](https://github.com/vercel-labs/ai) to handle the AI agent.
 - The [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) and [Auth0 Next.js SDK](https://github.com/auth0/nextjs-auth0) to secure the application and call third-party APIs.
@@ -65,7 +65,8 @@ Next, you'll need to set up environment variables in your repo's `.env.local` fi
 
 - To start with the examples, you'll just need to add your OpenAI API key and Auth0 credentials for the Web app and Machine to Machine App.
   - You can setup a new Auth0 tenant with an Auth0 Web App and Token Vault following the Prerequisites instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
-  - You can setup a new Auth0 Machine to Machine App with Async Authorizations enabled following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
+  - Click on the tenant name on the [Quickstarts](https://auth0.com/ai/docs/call-your-apis-on-users-behalf), Go to the app settings (**Applications** -> **Applications** -> **WebApp Quickstart Client** -> **Settings** -> **Advanced Settings** -> **Grant Types**) and enable the CIBA grant and save.
+  - For Async Authorizations, you can setup Guardian Push and Enroll the your user for Guardian following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
   - An Auth0 FGA account, you can create one [here](https://dashboard.fga.dev). Add the FGA store ID, client ID, client secret, and API URL to the `.env.local` file.
   - Optionally add a [SerpAPI](https://serpapi.com/) API key for using web search tool.
 
