@@ -1,0 +1,212 @@
+### 1. Configure Auth0 AI
+
+First, you must install the SDK:
+
+```bash showLineNumbers
+npm install @auth0/ai-llamaindex
+```
+
+Then, you need to initialize Auth0 AI and set up the connection to request access tokens with the required GitHub scopes.
+
+```typescript showLineNumbers title="./src/lib/auth0-ai.ts"
+import { Auth0AI } from "@auth0/ai-llamaindex";
+import { auth0 } from "@/lib/auth0";
+
+const auth0AI = new Auth0AI();
+
+export const withGitHub = auth0AI.withTokenForConnection({
+  connection: "github",
+  scopes: ["repo"],
+  refreshToken: async () => {
+    const session = await auth0.getSession();
+    const refreshToken = session?.tokenSet.refreshToken as string;
+    return refreshToken;
+  },
+});
+
+```
+:::info
+Here, the property `auth0` is an instance of `@auth0/nextjs-auth0` to handle the application auth flows. <br/>
+You can check different authentication options for Next.js with Auth0 at the [official documentation.](https://github.com/auth0/nextjs-auth0?tab=readme-ov-file#3-create-the-auth0-sdk-client)
+:::
+
+### 2. Integrate your tool with GitHub
+
+Wrap your tool using the Auth0 AI SDK to obtain an access token for the GitHub API.
+
+```typescript showLineNumbers title="./src/lib/tools/listRepositories.ts"
+import { Octokit, RequestError } from "octokit";
+import { z } from "zod";
+// highlight-next-line
+import { withGitHub } from "@/lib/auth0-ai";
+// highlight-next-line
+import { getAccessTokenForConnection } from "@auth0/ai-vercel";
+// highlight-next-line
+import { FederatedConnectionError } from "@auth0/ai/interrupts";
+import { tool } from "llamaindex";
+
+export const listRepositories = () =>
+  withGitHub(
+    tool(
+      async () => {
+        // Get the access token from Auth0 AI
+        // highlight-next-line
+        const accessToken = getAccessTokenForConnection();
+
+        // GitHub SDK
+        try {
+          const octokit = new Octokit({
+            // highlight-next-line
+            auth: credentials?.accessToken,
+          });
+
+          const { data } = await octokit.rest.repos.listForAuthenticatedUser();
+
+          return data.map((repo) => repo.name);
+        } catch (error) {
+          if (error instanceof RequestError) {
+            if (error.status === 401) {
+              // highlight-next-line
+              throw new FederatedConnectionError(
+                // highlight-next-line
+                `Authorization required to access the Federated Connection`
+              // highlight-next-line
+              );
+            }
+          }
+
+          throw error;
+        }
+      },
+      {
+        name: "listRepositories",
+        description: "List respositories for the current user on GitHub",
+        parameters: z.object({}),
+      }
+    )
+  );
+```
+
+### 3. Handle authentication redirects
+
+Interrupts are a way for the system to pause execution and prompt the user to take an action —such as authenticating or granting API access— before resuming the interaction. This ensures that any required access is granted dynamically and securely during the chat experience. In this context, Auth0-AI SDK manages authentication redirects in the LlamaIndex SDK via these interrupts.
+
+#### Server Side
+
+On the server-side code of your Next.js App, you need to set up the tool invocation and handle the interruption messaging via the `errorSerializer`. The `setAIContext` function is used to set the async-context for the Auth0 AI SDK.
+
+```typescript showLineNumbers title="./src/app/api/chat/route.ts"
+import { createDataStreamResponse, LlamaIndexAdapter, Message, ToolExecutionError } from "ai";
+// highlight-next-line
+import { listRepositories } from "@/lib/tools/";
+// highlight-next-line
+import { setAIContext } from "@auth0/ai-llamaindex";
+// highlight-next-line
+import { withInterruptions } from "@auth0/ai-llamaindex/interrupts";
+// highlight-next-line
+import { errorSerializer } from "@auth0/ai-vercel/interrupts";
+import { OpenAIAgent } from "llamaindex";
+
+export async function POST(request: Request) {
+  const { id, messages }: { id: string; messages: Message[] } =
+    await request.json();
+
+  setAIContext({ threadID: id });
+
+  return createDataStreamResponse({
+    // highlight-next-line
+    execute: withInterruptions(
+      async (dataStream) => {
+        const agent = new OpenAIAgent({
+          systemPrompt: "You are an AI assistant",
+          tools: [listRepositories()],
+          verbose: true,
+        });
+
+        const stream = await agent.chat({
+          message: messages[messages.length - 1].content,
+          stream: true,
+        });
+
+        LlamaIndexAdapter.mergeIntoDataStream(stream as any, { dataStream });
+      },
+      {
+        messages,
+        errorType: ToolExecutionError,
+      }
+    ),
+    // highlight-next-line
+    onError: errorSerializer((err) => {
+      console.log(err);
+      return "Oops, an error occured!";
+    }),
+  });
+}
+```
+
+#### Client Side
+
+On this example we utilize the `EnsureAPIAccessPopup` component to show a popup that allows the user to authenticate with GitHub and grant access with the requested scopes. You'll first need to install the `@auth0/ai-components` package:
+
+```bash showLineNumbers
+npx @auth0/ai-components add FederatedConnections
+```
+
+Then, you can integrate the authentication popup in your chat component, using the interruptions helper from the SDK:
+
+```tsx showLineNumbers title="./src/components/chat.tsx"
+"use client";
+
+import { generateId } from "ai";
+// highlight-next-line
+import { EnsureAPIAccessPopup } from "@/components/auth0-ai/FederatedConnections/popup";
+// highlight-next-line
+import { useInterruptions } from "@auth0/ai-vercel/react";
+// highlight-next-line
+import { FederatedConnectionInterrupt } from "@auth0/ai/interrupts";
+import { useChat } from "@ai-sdk/react";
+
+export default function Chat() {
+  const { messages, handleSubmit, input, setInput, toolInterrupt } =
+    useInterruptions((handler) =>
+      useChat({
+        experimental_throttle: 100,
+        sendExtraMessageFields: true,
+        generateId,
+        onError: handler((error) => console.error("Chat error:", error)),
+      })
+    );
+
+  return (
+    <div>
+      {messages.map((message) => (
+        <div key={message.id}>
+          {message.role === "user" ? "User: " : "AI: "}
+          {message.content}
+          {message.parts && message.parts.length > 0 && (
+            <div>
+              // highlight-start
+              {toolInterrupt?.toolCall.id.includes(message.id) &&
+                FederatedConnectionInterrupt.isInterrupt(toolInterrupt) && (
+                  <EnsureAPIAccessPopup
+                    interrupt={toolInterrupt}
+                    connectWidget={{
+                      title: `Requested by: "${toolInterrupt.toolCall.name}"`,
+                      description: "Description...",
+                      action: { label: "Check" },
+                    }}
+                  />
+                )}
+              // highlight-end
+            </div>
+          )}
+        </div>
+      ))}
+
+      <form onSubmit={handleSubmit}>
+        <input value={input} placeholder="Say something..." onChange={(e) => setInput(e.target.value)} autoFocus />
+      </form>
+    </div>
+  );
+}
+```

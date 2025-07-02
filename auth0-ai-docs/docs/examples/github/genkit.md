@@ -1,0 +1,350 @@
+### 1. Configure Auth0 AI
+
+First, you must install the SDK:
+
+```bash showLineNumbers
+npm install @auth0/ai-genkit
+```
+
+Then, you need to initialize Auth0 AI and set up the connection to request access tokens with the required GitHub scopes.
+
+```typescript showLineNumbers title="./src/lib/auth0-ai.ts"
+import { Auth0AI } from "@auth0/ai-genkit";
+import { auth0 } from "@/lib/auth0";
+
+// importing GenKit instance
+import { ai } from "./genkit";
+
+const auth0AI = new Auth0AI({
+  genkit: ai,
+});
+
+export const withGitHub = auth0AI.withTokenForConnection({
+  connection: "github",
+  scopes: ["repo"],
+  refreshToken: async () => {
+    const session = await auth0.getSession();
+    const refreshToken = session?.tokenSet.refreshToken as string;
+    return refreshToken;
+  },
+});
+
+```
+:::info
+Here, the property `auth0` is an instance of `@auth0/nextjs-auth0` to handle the application auth flows. <br/>
+You can check different authentication options for Next.js with Auth0 at the [official documentation.](https://github.com/auth0/nextjs-auth0?tab=readme-ov-file#3-create-the-auth0-sdk-client)
+:::
+
+### 2. Integrate your tool with GitHub
+
+Wrap your tool using the Auth0 AI SDK to obtain an access token for the GitHub API.
+
+```typescript showLineNumbers title="./src/lib/tools/listRepositories.ts"
+import { Octokit, RequestError } from "octokit";
+import { z } from "zod";
+// highlight-next-line
+import { getAccessTokenForConnection } from "@auth0/ai-genkit";
+// highlight-next-line
+import { FederatedConnectionError } from "@auth0/ai/interrupts";
+// highlight-next-line
+import { withGoogleCalendar } from "@/lib/auth0-ai";
+
+// importing GenKit instance
+import { ai } from "../genkit";
+
+export const listRepositories = ai.defineTool(
+  // highlight-next-line
+  ...withGitHub(
+    {
+      description: "List respositories for the current user on GitHub",
+      inputSchema: z.object({}),
+      name: "listRepositories",
+    },
+    async () => {
+      // Get the access token from Auth0 AI
+      // highlight-next-line
+      const accessToken = getAccessTokenForConnection();
+
+      try {
+        // GitHub SDK
+        const octokit = new Octokit({
+          auth: accessToken,
+        });
+
+        const { data } = await octokit.rest.repos.listForAuthenticatedUser();
+
+        return data.map((repo) => repo.name);
+      } catch (error) {
+        if (error instanceof RequestError) {
+          if (error.status === 401) {
+            // highlight-start
+            throw new FederatedConnectionError(
+              `Authorization required to access the Federated Connection`
+            );
+            // highlight-end
+          }
+        }
+
+        throw error;
+      }
+    }
+  )
+);
+```
+
+### 3. Handle authentication redirects
+
+Interrupts are a way for the system to pause execution and prompt the user to take an action—such as authenticating or granting API access—before resuming the interaction. This ensures that any required access is granted dynamically and securely during the chat experience. In this context, Auth0-AI SDK manages authentication redirects in the GenKit SDK via these interrupts.
+
+#### Server Side
+
+On the server-side code of your Next.js App, you need to set up the tool invocation and handle the interruption messaging via the `errorSerializer`. The `setAIContext` function is used to set the async-context for the Auth0 AI SDK.
+
+```typescript showLineNumbers title="./src/app/api/chat/route.ts"
+import { ToolRequestPart } from "genkit";
+import path from "path";
+import { ai } from "@/lib/genkit";
+// highlight-next-line
+import { listRepositories } from "@/lib/tools/list-repositories";
+// highlight-next-line
+import { resumeAuth0Interrupts } from "@auth0/ai-genkit";
+import { auth0 } from "@/lib/auth0";
+
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const auth0Session = await auth0.getSession();
+  const { id } = await params;
+  const {
+    message,
+    interruptedToolRequest,
+    timezone,
+  }: {
+    message?: string;
+    interruptedToolRequest?: ToolRequestPart;
+    timezone: { region: string; offset: number };
+  } = await request.json();
+
+  let session = await ai.loadSession(id);
+
+  if (!session) {
+    session = ai.createSession({
+      sessionId: id,
+    });
+  }
+
+  const tools = [listRepositories];
+
+  const chat = session.chat({
+    tools: tools,
+    system: `You are a helpful assistant.
+    The user's timezone is ${timezone.region} with an offset of ${timezone.offset} minutes.
+    User's details: ${JSON.stringify(auth0Session?.user, null, 2)}.
+    You can use the tools provided to help the user.
+    You can also ask the user for more information if needed.
+    Chat started at ${new Date().toISOString()}
+    `,
+  });
+
+  const r = await chat.send({
+    prompt: message,
+    // highlight-next-line
+    resume: resumeAuth0Interrupts(tools, interruptedToolRequest),
+  });
+
+  return Response.json({ messages: r.messages, interrupts: r.interrupts });
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  const session = await ai.loadSession(id);
+
+  if (!session) {
+    return new Response("Session not found", {
+      status: 404,
+    });
+  }
+
+  const json = session.toJSON();
+
+  if (!json?.threads?.main) {
+    return new Response("Session not found", {
+      status: 404,
+    });
+  }
+
+  return Response.json(json.threads.main);
+}
+```
+
+#### Client Side
+
+On this example we utilize the `EnsureAPIAccessPopup` component to show a popup that allows the user to authenticate with Google Calendar and grant access with the requested scopes. You'll first need to install the `@auth0/ai-components` package:
+
+```bash showLineNumbers
+npx @auth0/ai-components add FederatedConnections
+```
+
+Then, you can integrate the authentication popup in your chat component, using the interruptions helper from the SDK:
+
+```tsx showLineNumbers title="./src/components/chat.tsx"
+"use client";
+import { useQueryState } from "nuqs";
+import { FormEventHandler, useEffect, useRef, useState } from "react";
+// highlight-start
+import { FederatedConnectionInterrupt } from "@auth0/ai/interrupts";
+import { EnsureAPIAccessPopup } from "@/components/auth0-ai/FederatedConnections/popup";
+// highlight-end
+import Markdown from "react-markdown";
+
+const useFocus = () => {
+  const htmlElRef = useRef<HTMLInputElement>(null);
+  const setFocus = () => {
+    if (!htmlElRef.current) {
+      return;
+    }
+    htmlElRef.current.focus();
+  };
+  return [htmlElRef, setFocus] as const;
+};
+
+export default function Chat() {
+  const [threadId, setThreadId] = useQueryState("threadId");
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<
+    {
+      role: "user" | "model";
+      content: [{ text?: string; metadata?: { interrupt?: any } }];
+    }[]
+  >([]);
+
+  useEffect(() => {
+    if (!threadId) {
+      setThreadId(self.crypto.randomUUID());
+    }
+  }, [threadId, setThreadId]);
+
+  useEffect(() => {
+    if (!threadId) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    (async () => {
+      const messagesResponse = await fetch(`/api/chat/${threadId}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (!messagesResponse.ok) {
+        setMessages([]);
+      } else {
+        setMessages(await messagesResponse.json());
+      }
+      setIsLoading(false);
+    })();
+  }, [threadId]);
+
+  const [inputRef, setInputFocus] = useFocus();
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    setInputFocus();
+  }, [isLoading, setInputFocus]);
+
+  const submit = async ({
+    message,
+    interruptedToolRequest,
+  }: {
+    message?: string;
+    interruptedToolRequest?: any;
+  }) => {
+    setIsLoading(true);
+    const timezone = {
+      region: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      offset: new Date().getTimezoneOffset(),
+    };
+    const response = await fetch(`/api/chat/${threadId}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message, interruptedToolRequest, timezone }),
+    });
+    if (!response.ok) {
+      console.error("Error sending message");
+    } else {
+      const { messages: messagesResponse } = await response.json();
+      setMessages(messagesResponse);
+    }
+    setIsLoading(false);
+  };
+
+  // //When the user submits a message, add it to the list of messages and resume the conversation.
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault();
+    setMessages((messages) => [
+      ...messages,
+      { role: "user", content: [{ text: input }] },
+    ]);
+    submit({ message: input });
+    setInput("");
+  };
+
+  return (
+    <div>
+      {messages
+        .filter(
+          (m) =>
+            ["model", "user", "tool"].includes(m.role) &&
+            m.content?.length > 0 &&
+            (m.content[0].text || m.content[0].metadata?.interrupt)
+        )
+        .map((message, index) => (
+          <div key={index}>
+            <Markdown>
+              {(message.role === "user" ? "User: " : "AI: ") +
+                (message.content[0].text || "")}
+            </Markdown>
+            // highlight-start
+            {!isLoading &&
+            message.content[0].metadata?.interrupt &&
+            FederatedConnectionInterrupt.isInterrupt(
+              message.content[0].metadata?.interrupt
+            )
+              ? (() => {
+                  const interrupt: any = message.content[0].metadata?.interrupt;
+                  return (
+                    <div>
+                      <EnsureAPIAccessPopup
+                        onFinish={() => submit({ interruptedToolRequest: message.content[0] })}
+                        interrupt={interrupt}
+                        connectWidget={{
+                          title: `Requested by: "${interrupt.toolCall.toolName}"`,
+                          description: "Description...",
+                          action: { label: "Check" },
+                        }}
+                      />
+                    </div>
+                  );
+                })()
+              : null}
+          // highlight-end
+          </div>
+        ))}
+
+      <form onSubmit={handleSubmit}>
+        <input value={input} ref={inputRef} placeholder="Say something..." readOnly={isLoading} disabled={isLoading} onChange={(e) => setInput(e.target.value)} />
+      </form>
+    </div>
+  );
+}
+```

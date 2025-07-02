@@ -1,0 +1,96 @@
+.cardLink {
+  &:hover {
+    text-decoration: none !important;
+    .cardContainer {
+      background-color: #2c2c2c;
+    }
+  }
+}
+
+.cardContainer {
+  border-radius: 1rem;
+  padding: 1.25rem;
+  background: #171717;
+  border: thin solid #383838;
+  margin: 1rem 0;
+  transition: all ease-in-out 300ms;
+  gap: 1rem;
+  display: flex;
+  width: 100%;
+}
+
+.cardHeaderCTAContainer {
+  flex: none;
+}
+
+.cardBody {
+  flex: auto;
+  font-size: 13px;
+  p {
+    width: 100%;
+    font-size: 13px;
+    margin-bottom: 0;
+  }
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin-bottom: 0;
+  }
+}
+
+.iconContainer {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  background-color: #171717;
+  border-radius: 6px;
+  border: 1px solid #383838;
+}
+
+.checkboxContainer {
+  display: flex;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  align-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.iconImage {
+  width: 2.25rem;
+  height: 2.25rem;
+  object-fit: scale-down;
+  display: block;
+}
+
+.tagsContainer {
+  display: flex;
+  gap: 0.5rem;
+  @media (max-width: 996px) {
+    flex-wrap: wrap;
+  }
+}
+
+.tag {
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  background: #2a2a2a;
+  color: #fbfbfb;
+  font-family: 'Aeonik', Inter, Arial, Helvetica, sans-serif !important;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  letter-spacing: 0.77px;
+  text-transform: uppercase;
+}
+
+.noIconBorder {
+  border: none !important;
+  background-color: transparent !important;
+  object-fit: contain !important;
+  padding: 0;
+}

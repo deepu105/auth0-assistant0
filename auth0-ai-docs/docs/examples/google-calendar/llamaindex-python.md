@@ -1,0 +1,145 @@
+### 1. Configure Auth0 AI
+
+First, you must install the SDK:
+
+```bash showLineNumbers
+pip install auth0-ai-llamaindex
+```
+
+Then, you need to initialize Auth0 AI and set up the connection to request access tokens with the required Google Calendar scopes.
+
+```python showLineNumbers title="./src/lib/auth0-ai.py"
+from auth0_ai_llamaindex.auth0_ai import Auth0AI
+from flask import session
+
+auth0_ai = Auth0AI()
+
+with_google = auth0_ai.with_federated_connection(
+    connection="google-oauth2",
+    scopes=["https://www.googleapis.com/auth/calendar.freebusy"],
+    refresh_token=lambda *_args, **_kwargs:session["user"]["refresh_token"],
+)
+```
+:::info
+Here, the session is controlled by a Flask application instance. You may utilize any other framework or session store of your preference.
+:::
+
+### 2. Integrate your tool with Google Calendar
+
+Wrap your tool using the Auth0 AI SDK to obtain an access token for the Google Calendar API.
+
+```python showLineNumbers title="./src/lib/tools/check_availability.py"
+from datetime import timedelta
+from googleapiclient.errors import HttpError
+from googleapiclient.discovery import build
+from google.oauth2.credentials import Credentials
+from typing import Annotated
+from llama_index.core.tools import FunctionTool
+# highlight-next-line
+from auth0_ai_llamaindex.federated_connections import get_access_token_for_connection, FederatedConnectionError
+# highlight-next-line
+from src.lib.auth0_ai import with_google
+
+def check_user_calendar_tool_function(
+    date: Annotated[str, "Date and time in ISO 8601 format."]
+):
+    # Get the access token from Auth0 AI
+    # highlight-next-line
+    access_token = get_access_token_for_connection()
+
+    # Google SDK
+    try:
+        # highlight-next-line
+        service = build('calendar', 'v3', credentials=Credentials(token=access_token))
+        time_min = date.isoformat() + 'Z'
+        time_max = (date + timedelta(hours=1)).isoformat() + 'Z'
+        body = {
+            "timeMin": time_min,
+            "timeMax": time_max,
+            "timeZone": "UTC",
+            "items": [{"id": "primary"}]
+        }
+
+        freebusy_query = service.freebusy().query(body=body).execute()
+        busy_times = freebusy_query['calendars']['primary'].get('busy', [])
+        return {"available": len(busy_times) == 0}
+    except HttpError as e:
+        if e.resp.status == 401:
+            # highlight-next-line
+            raise FederatedConnectionError("Authorization required to access the Federated Connection API")
+
+        raise ValueError(f"Invalid response from Google Calendar API: {response.status_code} - {response.text}")
+
+# highlight-next-line
+check_user_calendar_tool = with_google(FunctionTool.from_defaults(
+    name="check_user_calendar",
+    description="Use this function to check if the user is available on a certain date and time",
+    fn=check_user_calendar_tool_function,
+))
+```
+
+Now that the tool is protected, you can pass it your LlamaIndex agent.
+
+```python showLineNumbers title="./src/lib/agent.ts"
+from datetime import datetime
+from llama_index.agent.openai import OpenAIAgent
+# highlight-next-line
+from src.lib.tools.check_availability import check_user_calendar_tool
+
+system_prompt = f"""You are an assistant designed to answer random user's questions.
+**Additional Guidelines**:
+- Today’s date for reference: {datetime.now().isoformat()}
+"""
+
+agent = OpenAIAgent.from_tools(
+    tools=[
+        # a tool with federated connection access
+        # highlight-next-line
+        check_user_calendar_tool
+        # ... other tools
+    ],
+    model="gpt-4o",
+    system_prompt=system_prompt
+    verbose=True,
+)
+```
+
+### 3. Handle authentication redirects
+
+Interrupts are a way for the system to pause execution and prompt the user to take an action —such as authenticating or granting API access— before resuming the interaction. This ensures that any required access is granted dynamically and securely during the chat experience. In this context, Auth0-AI SDK manages such authentication redirects integrated with the LLamaIndex SDK.
+
+#### Server side
+
+On the server side of your Flask application you will need to set up a route to handle the Chat API requests. This route will be responsible for forwarding the requests to the OpenAI API utilizing LlamaIndex's SDK, that has been initialized with Auth0 AI's protection enhancements for tools.
+
+When `FederatedConnectionInterrupt` error ocurrs, the server side will signal the front-end about the level access restrictions, and the front-end should prompt the user to trigger a new authorization (or login) request with the necessary permissions.
+
+
+```python showLineNumbers title="./src/app.py"
+from dotenv import load_dotenv
+from flask import Flask, request, jsonify, session
+# highlight-start
+from auth0_ai_llamaindex.auth0_ai import Auth0AI
+from auth0_ai_llamaindex.federated_connections import FederatedConnectionInterrupt
+from src.lib.agent import agent
+# highlight-end
+
+load_dotenv()
+app = Flask(__name__)
+
+@app.route("/chat", methods=["POST"])
+async def chat():
+    if "user" not in session:
+        return jsonify({"error": "unauthorized"}), 401
+
+    try:
+        message = request.json.get("message")
+        response = agent.achat(message)
+        return jsonify({"response": str(response)})
+    # highlight-start
+    except FederatedConnectionInterrupt as e:
+        return jsonify({"error": str(e.to_json())}), 403
+    # highlight-end
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+```

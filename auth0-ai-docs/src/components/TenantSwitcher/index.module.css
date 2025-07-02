@@ -1,0 +1,60 @@
+.tenantSwitcherContainer {
+  display: inline-flex;
+}
+
+.innerTenantSwitcherContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #1e1e1e;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: 1px solid #383838;
+  min-width: 180px;
+
+  @media (max-width: 996px) {
+    background: transparent;
+    border: 0;
+    padding: 8px 0;
+  }
+  cursor: pointer;
+}
+
+.tenantSwitcherContainer:focus-visible {
+  outline: none;
+  border: 2px solid #99a7f1;
+}
+
+.tenantIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #1e212a 0%, #677190 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbfbfb;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.tenantInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1 0 0;
+}
+
+.tenantNameContainer {
+  color: #fbfbfb;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 115%;
+}
+
+.tenantTierContainer {
+  color: #ababab;
+  font-size: 12px;
+  line-height: 115%;
+}

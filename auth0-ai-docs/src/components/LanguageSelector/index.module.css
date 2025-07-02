@@ -1,0 +1,97 @@
+.languageSelector {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 40px 0 8px;
+}
+
+.languageSelectorTitle {
+  color: #fbfbfb;
+  font-family: Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1rem;
+  letter-spacing: 0.77px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.languageSelectorContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.languageSelectorOption {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 175px;
+  padding: 0.5rem;
+  justify-content: flex-start;
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  transition:
+    background 0.2s ease-in-out,
+    border 0.2s ease-in-out;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+
+  @media (max-width: 1024px) {
+    width: 250px;
+  }
+
+  @media (max-width: 996px) {
+    width: 150px;
+  }
+}
+
+.languageSelectorOption:hover {
+  background-color: #383838;
+}
+
+.languageSelectorOptionSelected {
+  background-color: #383838;
+  border: 2px solid #b6caff;
+}
+
+.languageSelectorOptionDisabled {
+  background-color: #383838;
+  opacity: 0.5;
+}
+
+.languageSelectorOptionImageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.25rem;
+  background-color: #171717;
+  border-radius: 6px;
+  border: 1px solid #383838;
+}
+
+.languageSelectorOptionImage {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  display: block;
+}
+
+.languageSelection {
+  display: none;
+}
+
+.languageSelectionSelected {
+  display: block !important;
+  width: 100%;
+}

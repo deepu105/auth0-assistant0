@@ -1,0 +1,32 @@
+.tooltipContainer {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+
+.tooltip {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  background-color: #191919;
+  border: 1px solid rgba(229, 229, 229, 0.25);
+  white-space: nowrap;
+  transition: opacity 300ms ease-in-out;
+
+  opacity: 0;
+
+  &[data-visible='true'] {
+    opacity: 100%;
+    pointer-events: auto;
+  }
+}
+
+.above {
+  top: -3.5rem;
+}
+
+.below {
+  bottom: -3.5rem;
+}

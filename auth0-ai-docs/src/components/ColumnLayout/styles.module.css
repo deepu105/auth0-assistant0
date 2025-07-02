@@ -1,0 +1,36 @@
+.columnLayoutContainer {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+.columnLayoutSection {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin: 1rem 0;
+  padding: 2rem 0;
+  border-top: 1px solid #383838;
+  width: 100%;
+  @media (max-width: 996px) {
+    flex-wrap: wrap;
+  }
+}
+
+.columnLayoutContentLeft {
+  max-width: 200px;
+}
+
+.columnLayoutContentRight {
+  width: 60%;
+  @media (max-width: 996px) {
+    width: 100%;
+  }
+}
+
+.noborder {
+  border: none !important;
+}

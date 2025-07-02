@@ -1,0 +1,18 @@
+.arrowLinkContainer {
+  display: inline-flex;
+  justify-content: flex-start;
+  align-items: center;
+  @media (max-width: 996px) {
+    flex-wrap: wrap;
+  }
+}
+
+.arrowIcon {
+  width: 1rem;
+  height: 1rem;
+  object-fit: scale-down;
+}
+
+.arrowLinkContainer a {
+  text-decoration: underline;
+}

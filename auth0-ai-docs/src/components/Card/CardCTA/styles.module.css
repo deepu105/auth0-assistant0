@@ -1,0 +1,43 @@
+.cardCTA {
+  color: #fbfbfb;
+  text-decoration: none;
+  font-family: 'Aeonik', Inter, Arial, Helvetica, sans-serif !important;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+  > a {
+    color: #fbfbfb;
+    text-decoration: none;
+  }
+}
+
+.cardCTAContainer {
+  cursor: pointer;
+  display: flex;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  background: #111111;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background: #696868;
+}
+
+.loading {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 3.5rem;
+  border-radius: 0.5rem;
+  background: #696868;
+  font-size: 1rem;
+  @media (max-width: 996px) {
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+  }
+}

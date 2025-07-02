@@ -1,0 +1,135 @@
+### 1. Configure Auth0 AI
+
+First, you must install the SDK:
+
+```bash showLineNumbers
+pip install auth0-ai-llamaindex
+```
+
+Then, you need to initialize Auth0 AI and set up the connection to request access tokens with the required Slack scopes.
+
+```python showLineNumbers title="./src/lib/auth0-ai.py"
+from auth0_ai_llamaindex.auth0_ai import Auth0AI
+from flask import session
+
+auth0_ai = Auth0AI()
+
+with_slack = auth0_ai.with_federated_connection(
+    connection="sign-in-with-slack",
+    scopes=["channels:read groups:read"],
+    refresh_token=lambda *_args, **_kwargs:session["user"]["refresh_token"],
+)
+```
+:::info
+Here, the session is controlled by a Flask application instance. You may utilize any other framework or session store of your preference.
+:::
+
+### 2. Integrate your tool with Slack
+
+Wrap your tool using the Auth0 AI SDK to obtain an access token for the Slack API.
+
+```python showLineNumbers title="./src/lib/tools/list_channels.py"
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
+from llama_index.core.tools import FunctionTool
+# highlight-next-line
+from auth0_ai_llamaindex.federated_connections import get_access_token_for_connection, FederatedConnectionError
+from src.lib.auth0_ai import with_slack
+
+def list_slack_channels_tool_function():
+    # Get the access token from Auth0 AI
+    # highlight-next-line
+    access_token = get_access_token_for_connection()
+
+    # Slack SDK
+    try:
+        # highlight-next-line
+        client = WebClient(token=access_token)
+        response = client.conversations_list(
+            exclude_archived=True,
+            types="public_channel,private_channel",
+            limit=10
+        )
+        channels = response['channels']
+        channel_names = [channel['name'] for channel in channels]
+        return channel_names
+    except SlackApiError as e:
+        if e.response['error'] == 'not_authed':
+            # highlight-next-line
+            raise FederatedConnectionError("Authorization required to access the Federated Connection API")
+
+        raise ValueError(f"An error occurred: {e.response['error']}")
+
+# highlight-next-line
+list_slack_channels_tool = with_slack(FunctionTool.from_defaults(
+    name="list_slack_channels",
+    description="List channels for the current user on Slack",
+    fn=list_slack_channels_tool_function,
+))
+```
+
+Now that the tool is protected, you can pass it your LlamaIndex agent.
+
+```python showLineNumbers title="./src/lib/agent.ts"
+from datetime import datetime
+from llama_index.agent.openai import OpenAIAgent
+# highlight-next-line
+from src.lib.tools.list_channels import list_slack_channels_tool
+
+system_prompt = f"""You are an assistant designed to answer random user's questions.
+**Additional Guidelines**:
+- Today’s date for reference: {datetime.now().isoformat()}
+"""
+
+agent = OpenAIAgent.from_tools(
+    tools=[
+        # a tool with federated connection access
+        # highlight-next-line
+        list_slack_channels_tool
+        # ... other tools
+    ],
+    model="gpt-4o",
+    system_prompt=system_prompt
+    verbose=True,
+)
+```
+
+### 3. Handle authentication redirects
+
+Interrupts are a way for the system to pause execution and prompt the user to take an action —such as authenticating or granting API access— before resuming the interaction. This ensures that any required access is granted dynamically and securely during the chat experience. In this context, Auth0-AI SDK manages such authentication redirects integrated with the LLamaIndex SDK.
+
+#### Server side
+
+On the server side of your Flask application you will need to set up a route to handle the Chat API requests. This route will be responsible for forwarding the requests to the OpenAI API utilizing LlamaIndex's SDK, that has been initialized with Auth0 AI's protection enhancements for tools.
+
+When `FederatedConnectionInterrupt` error ocurrs, the server side will signal the front-end about the level access restrictions, and the front-end should prompt the user to trigger a new authorization (or login) request with the necessary permissions.
+
+
+```python showLineNumbers title="./src/app.py"
+from dotenv import load_dotenv
+from flask import Flask, request, jsonify, session
+# highlight-start
+from auth0_ai_llamaindex.auth0_ai import Auth0AI
+from auth0_ai_llamaindex.federated_connections import FederatedConnectionInterrupt
+from src.lib.agent import agent
+# highlight-end
+
+load_dotenv()
+app = Flask(__name__)
+
+@app.route("/chat", methods=["POST"])
+async def chat():
+    if "user" not in session:
+        return jsonify({"error": "unauthorized"}), 401
+
+    try:
+        message = request.json.get("message")
+        response = agent.achat(message)
+        return jsonify({"response": str(response)})
+    # highlight-start
+    except FederatedConnectionInterrupt as e:
+        return jsonify({"error": str(e.to_json())}), 403
+    # highlight-end
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+```

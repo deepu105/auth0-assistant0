@@ -1,0 +1,8 @@
+{
+  "label": "Auth for MCP",
+  "position": 5,
+  "link": {
+    "type": "doc",
+    "id": "auth-for-mcp"
+  }
+}

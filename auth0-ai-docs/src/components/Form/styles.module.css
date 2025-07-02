@@ -1,0 +1,83 @@
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0 auto 1.25rem auto;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.description {
+  color: #ababab;
+  margin-top: 0.5rem;
+}
+
+label {
+  font-weight: 550;
+  margin-bottom: 0.5rem;
+  color: #fbfbfb;
+}
+
+.input {
+  padding: 0.5rem;
+  border: 1px solid #ababab;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.input:disabled {
+  cursor: not-allowed;
+  border: 1px solid #393838;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.formButton {
+  padding: 0.5rem 1rem;
+  background-color: #393838;
+  color: #fbfbfb;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  /* font-weight: 550; */
+}
+
+.formButton:disabled {
+  background-color: #393838;
+  color: #fbfbfb40; /* Even more transparent when disabled (25% opacity) */
+  cursor: not-allowed;
+}
+
+.loading {
+  cursor: none;
+  padding: 0.5rem 1.5rem;
+}
+
+.cancel {
+  background: none !important;
+}
+
+.toggleEye {
+  width: 1.5rem;
+  height: 2rem;
+  position: absolute;
+  top: 2.25rem;
+  right: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.8;
+  }
+
+  @media (max-width: 200px) {
+    display: none;
+  }
+}
