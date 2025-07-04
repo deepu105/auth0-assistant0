@@ -49,7 +49,7 @@ To begin using Auth0 Token Vault in your GenAI applications, refer to the follow
 - **Quickstarts:**
   - [Call Other's APIs on User's Behalf](../call-others-apis-on-users-behalf)
 - **Guides:**
-  - [Client-Initiated Account Linking Guide](https://auth0.com/ai/docs/client-initiated-account-linking)
+  - [Client-Initiated Account Linking Guide](../client-initiated-account-linking)
 
 ## Learn more
 
