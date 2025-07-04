@@ -47,7 +47,7 @@ Choosing a login flow impacts security and user experience. Auth0 offers two way
    - **Advanced customizations**: Allows you to build custom, client-rendered versions of Universal Login screens, giving you control over every pixel of your Universal Login experience.
    - **Use case:** Ideal for most GenAI services requiring secure, frictionless user access.
 
-<!-- ![Universal login screen][image2] -->
+![Universal login screen](/img/universal_login.png)
 
 2. [**Embedded Login**](https://auth0.com/docs/authenticate/login/embedded-login)**:** The login interface is integrated directly within your AI application's UI.
    - **Additional UI control:** Allows for highly customized branding.
