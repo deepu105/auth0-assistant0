@@ -1,8 +1,8 @@
 ---
-id: concepts
+id: glossary
 title: Concepts
 description: Learn about GenAI and identity management concepts related to Auth for GenAI. 
-slug: /concepts
+slug: /glossary
 sidebar_position: 3
 hide_table_of_contents: true
 ---

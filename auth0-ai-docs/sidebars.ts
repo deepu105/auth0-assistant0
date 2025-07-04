@@ -19,7 +19,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'intro/user-authentication',
         'intro/call-your-apis-on-users-behalf',
-        'intro/token-valut',
+        'intro/token-vault',
         'intro/connections',
         'intro/account-linking',
         'intro/call-others-apis-on-users-behalf',
@@ -79,34 +79,33 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: 'category',
-      label: 'SDKs',
+      label: 'Frameworks & SDKs',
       link: {
         type: 'doc',
         id: 'sdks/sdks',
       },
       collapsed: false,
       collapsible: false,
-      items: ['sdks/javascript-sdk', 'sdks/python-sdk'],
+      items: [
+        'sdks/javascript-sdk',
+        'sdks/python-sdk',
+        'sdks/langchain-sdk',
+        'sdks/llamaindex-sdk',
+        'sdks/vercel-ai-sdk',
+        'sdks/genkit-sdk',
+        'sdks/cloudflare-sdk',
+      ],
     },
     {
       type: 'category',
       label: 'Guides',
       link: {
         type: 'doc',
-        id: 'concepts/guides',
+        id: 'guides/guides',
       },
       collapsed: false,
       collapsible: false,
-      items: [
-        'concepts/google-sign-in-and-auth',
-        'concepts/client-initiated-account-linking',
-      ],
-    },
-    {
-      type: 'doc',
-      id: 'concepts/concepts',
-      label: 'Concepts',
-      className: 'menu__list-item-collapsible',
+      items: ['guides/google-sign-in-and-auth', 'guides/client-initiated-account-linking'],
     },
     {
       type: 'html',
@@ -117,6 +116,12 @@ const sidebars: SidebarsConfig = {
       type: 'doc',
       id: 'support/support',
       label: 'Support & Community',
+      className: 'menu__list-item-collapsible',
+    },
+    {
+      type: 'doc',
+      id: 'glossary',
+      label: 'Glossary',
       className: 'menu__list-item-collapsible',
     },
   ],

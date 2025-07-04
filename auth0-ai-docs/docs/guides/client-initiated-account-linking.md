@@ -10,7 +10,7 @@ hide_table_of_contents: true
 import LanguageSelector from "@site/src/components/LanguageSelector";
 import Language from "@site/src/components/LanguageSelector/Language";
 import AccountLinkingPreReq from "@site/src/components/Quickstarts/AccountLinkingPreReq";
-import LinkAccountParameters from './account_linking/_link_account_parameters.md';
+import LinkAccountParameters from './account-linking/_link-account-parameters.md';
 
 # Client-Initiated Account Linking
 
