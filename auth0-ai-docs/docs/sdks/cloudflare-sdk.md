@@ -7,7 +7,7 @@ sidebar_position: 22
 hide_table_of_contents: true
 ---
 
-# Cloudflare SDKs & Samples
+# Cloudflare Agents SDKs & Samples
 
 Auth for GenAI Cloudflare SDK make it easy for developers to integrate with and secure any AI agent workflow using Cloudflare Agents.
 

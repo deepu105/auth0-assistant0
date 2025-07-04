@@ -77,7 +77,10 @@ Follow our [quickstart guides](./get-started) for a step-by-step tutorial on imp
 
 Explore samples and SDKs for the different frameworks supported by Auth for GenAI.
 
-- [LangChain and LangGraph](./frameworks/langchain)
-- [LlamaIndex](./frameworks/llamaindex)
-- [Vercel AI SDK](./frameworks/vercel-ai)
-- [Genkit](./frameworks/genkit)
+- [JavaScript/TypeScript](./sdks/javascript-sdk)
+- [Python](./sdks/javascript-sdk)
+- [LangChain and LangGraph](./sdks/langchain-sdk)
+- [LlamaIndex](./sdks/llamaindex-sdk)
+- [Vercel AI SDK](./sdks/vercel-ai-sdk)
+- [Genkit](./sdks/genkit-sdk)
+- [Cloudflare Agents](./sdks/cloudflare-sdk)
