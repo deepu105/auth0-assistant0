@@ -209,6 +209,10 @@ a.pagination-nav__link {
   text-transform: uppercase;
 }
 
+.theme-doc-sidebar-item-category-level-2 .menu__link {
+  text-transform: none !important;
+}
+
 .menu__list .menu__link {
   margin: 0 0 1rem;
   padding: 0;
