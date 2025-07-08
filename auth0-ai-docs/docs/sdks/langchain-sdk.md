@@ -2,7 +2,7 @@
 id: langchain-sdk
 title: LangChain
 description: Learn how to use Auth for GenAI LangChain SDKs.
-slug: /sdks/langchain-sdk
+slug: /langchain-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -11,13 +11,7 @@ hide_table_of_contents: true
 
 Auth for GenAI LangChain & LangGraph SDK make it easy for developers to integrate with and secure any AI agent workflow using LangChain and LangGraph.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
-## JavaScript & TypeScript SDKs
+## JavaScript & TypeScript
 
 ### [Auth0 AI for LangChain](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-langchain)
 
@@ -60,6 +54,6 @@ Checkout our sample applications built with LangChain and LangGraph.
 Checkout our guides for LangChain and LangGraph in TypeScript and Python.
 
 - [Build an AI Assistant with LangGraph, Vercel, and Next.js: Use Gmail as a Tool Securely](https://auth0.com/blog/genai-tool-calling-build-agent-that-calls-gmail-securely-with-langgraph-vercelai-nextjs/)
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)

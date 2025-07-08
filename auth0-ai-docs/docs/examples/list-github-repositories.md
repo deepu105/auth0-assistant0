@@ -10,10 +10,6 @@ hide_table_of_contents: true
 
 Use OpenAI, NextJS, and the Auth0-AI SDKs to list your GitHub repositores.
 
-:::note
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-:::
-
 import LanguageSelector from "@site/src/components/LanguageSelector";
 import Language from "@site/src/components/LanguageSelector/Language";
 import Card from "@site/src/components/Card";

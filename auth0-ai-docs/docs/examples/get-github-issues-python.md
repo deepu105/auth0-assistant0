@@ -15,12 +15,6 @@ import Language from "@site/src/components/LanguageSelector/Language";
 
 Use your Python framework of choice, OpenAI GPT-4, and Auth0 to easily fetch GitHub repos.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 <LanguageSelector>
   <Language id="js" name="Python" icon="python.svg" >
   <Card headerText="Prerequisites">

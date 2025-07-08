@@ -17,12 +17,32 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       collapsible: false,
       items: [
-        'intro/user-authentication',
-        'intro/call-your-apis-on-users-behalf',
-        'intro/token-vault',
-        'intro/connections',
-        'intro/account-linking',
-        'intro/call-others-apis-on-users-behalf',
+        {
+          type: 'category',
+          label: 'User Authentication',
+          link: {
+            type: 'doc',
+            id: 'intro/user-authentication',
+          },
+          collapsed: false,
+          collapsible: false,
+          items: ['intro/call-your-apis-on-users-behalf'],
+        },
+        {
+          type: 'category',
+          label: "Call Other's APIs with Token Vault",
+          link: {
+            type: 'doc',
+            id: 'intro/token-vault',
+          },
+          collapsed: false,
+          collapsible: false,
+          items: [
+            'intro/connections',
+            'intro/account-linking',
+            'intro/call-others-apis-on-users-behalf',
+          ],
+        },
         'intro/asynchronous-authorization',
         'intro/authorization-for-rag',
       ],
@@ -92,8 +112,8 @@ const sidebars: SidebarsConfig = {
         'sdks/langchain-sdk',
         'sdks/llamaindex-sdk',
         'sdks/vercel-ai-sdk',
-        'sdks/genkit-sdk',
         'sdks/cloudflare-sdk',
+        'sdks/genkit-sdk',
       ],
     },
     {
@@ -105,7 +125,10 @@ const sidebars: SidebarsConfig = {
       },
       collapsed: false,
       collapsible: false,
-      items: ['guides/google-sign-in-and-auth', 'guides/client-initiated-account-linking'],
+      items: [
+        'guides/google-sign-in-and-auth',
+        'guides/client-initiated-account-linking',
+      ],
     },
     {
       type: 'html',

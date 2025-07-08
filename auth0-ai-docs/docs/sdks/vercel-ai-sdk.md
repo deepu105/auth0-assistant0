@@ -2,7 +2,7 @@
 id: vercel-ai-sdk
 title: Vercel AI SDK
 description: Learn how to use Auth for GenAI Vercel AI SDKs.
-slug: /sdks/vercel-ai-sdk
+slug: /vercel-ai-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # Vercel AI SDKs & Samples
 
 Auth for GenAI Vercel AI SDK make it easy for developers to integrate with and secure any AI agent workflow using Vercel AI.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ### [Auth0 AI for Vercel AI SDK](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-vercel)
 
@@ -42,7 +36,7 @@ Checkout our sample applications for JavaScript/TypeScript built with frameworks
 
 Checkout our guides for Vercel AI in TypeScript.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
-- [Get Salesforce Opportunities](../get-salesforce-opportunities)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)
+- [Get Salesforce Opportunities](./get-salesforce-opportunities)

@@ -13,12 +13,6 @@ import Card from "@site/src/components/Card";
 
 Explore how-tos of common Auth for GenAI use cases.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 ## Javascript & Python
 - [Check Google Calendar Availability](check-google-calendar-availability): Learn how to use Auth for GenAI SDKs to check your Google Calendar availability.
 - [List GitHub Repositories](list-github-repositories): Use OpenAI, NextJS, and the Auth0 SDKs to list your GitHub repositores.

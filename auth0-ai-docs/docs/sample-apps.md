@@ -11,12 +11,6 @@ hide_table_of_contents: true
 
 Explore sample applications built using Auth for GenAI.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 - Assistant0 (Next.js): A fullstack AI personal assistant that consolidates digital life by dynamically accessing multiple tools to help stay organized and efficient.
   - [LangGraph version](https://github.com/auth0-samples/auth0-assistant0)
   - [Vercel AI SDK version](https://github.com/auth0-samples/auth0-assistant0/tree/vercel-ai)

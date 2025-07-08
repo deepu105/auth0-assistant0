@@ -21,12 +21,6 @@ By the end of this quickstart, you should have an application that can:
 1. Retrieve authorized data as context for a RAG pipeline using [LangChain](https://www.langchain.com/).
 2. Use Auth0 FGA to determine if the user has authorization for the data.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 <LanguageSelector>
   <Language id="js" name="Node.js" icon="js-clean.svg">
 

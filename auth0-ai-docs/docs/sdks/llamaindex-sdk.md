@@ -2,7 +2,7 @@
 id: llamaindex-sdk
 title: LlamaIndex
 description: Learn how to use Auth for GenAI LlamaIndex SDKs.
-slug: /sdks/llamaindex-sdk
+slug: /llamaindex-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # LlamaIndex SDKs & Samples
 
 Auth for GenAI LlamaIndex SDK make it easy for developers to integrate with and secure any AI agent workflow using LlamaIndex.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ## JavaScript & TypeScript
 
@@ -60,6 +54,6 @@ Checkout our sample applications for LlamaIndex.
 
 Checkout our guides for LlamaIndex in TypeScript and Python.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)

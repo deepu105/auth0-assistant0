@@ -43,44 +43,44 @@ Explore the core concepts of Auth for GenAI. Each section provides an overview o
 
 Securely authenticate users in your GenAI applications using Auth0's [Universal Login](https://auth0.com/docs/authenticate/login/auth0-universal-login) with support for social, enterprise, and custom identity providers. This allows you to leverage robust standards like OAuth 2.0 and OpenID Connect to secure both interactive and headless AI agents.
 
-[Learn more](./intro/user-authentication)
+<a href="https://auth0.com/ai/docs/user-authentication" newTab={false}>Learn More</a>
 
 ### Call your APIs on a user's behalf
 
 Enable AI agents to securely call your application's own APIs (first-party APIs) on behalf of a user using OAuth 2.0. This pattern ensures that the user's context is maintained, preventing agents from having broad, unrestricted access to all user data.
 
-[Learn more](./intro/call-your-apis-on-users-behalf)
+<a href="https://auth0.com/ai/docs/call-your-apis-on-users-behalf" newTab={false}>Learn More</a>
 
 ### Call other's APIs on a user's behalf using Token Vault
 
 Securely connect AI agents to external tools and services like Google, Slack, or GitHub. Our Token Vault feature manages the complexities of obtaining, storing, and refreshing API tokens, allowing your agents to interact with third-party APIs without handling sensitive credentials or API keys directly.
 
-[Learn more](./intro/token-vault)
+<a href="https://auth0.com/ai/docs/token-vault" newTab={false}>Learn More</a>
 
 ### Asynchronous authorization
 
 Implement "human-in-the-loop" workflows for actions that are long-running or require user consent. Using standards like [CIBA (Client-Initiated Backchannel Authentication)](https://auth0.com/docs/get-started/authentication-and-authorization-flow/client-initiated-backchannel-authentication-flow), agents can request approval for sensitive operations via push notifications, SMS, or email, even when the user is not actively using the application.
 
-[Learn more](./intro/asynchronous-authorization)
+<a href="https://auth0.com/ai/docs/asynchronous-authorization" newTab={false}>Learn More</a>
 
 ### Authorization for RAG
 
 Enforce fine-grained, document-level access control within your Retrieval Augmented Generation (RAG) pipelines using [Auth0 FGA](https://auth0.com/fine-grained-authorization). This ensures that when a Large Language Model (LLM) generates a response, it only uses data that the current user is authorized to see, preventing [sensitive data leakage](https://genai.owasp.org/llmrisk/llm022025-sensitive-information-disclosure/) and ensuring compliance.
 
-[Learn more](./intro/authorization-for-rag)
+<a href="https://auth0.com/ai/docs/authorization-for-rag" newTab={false}>Learn More</a>
 
 ## Get started
 
-Follow our [quickstart guides](./get-started) for a step-by-step tutorial on implementing authentication and authorization in your GenAI applications.
+Follow our <a href="https://auth0.com/ai/docs/get-started" newTab={false}>quickstart guides</a> for a step-by-step tutorial on implementing authentication and authorization in your GenAI applications.
 
 ## Frameworks
 
 Explore samples and SDKs for the different frameworks supported by Auth for GenAI.
 
-- [JavaScript/TypeScript](./sdks/javascript-sdk)
-- [Python](./sdks/javascript-sdk)
-- [LangChain and LangGraph](./sdks/langchain-sdk)
-- [LlamaIndex](./sdks/llamaindex-sdk)
-- [Vercel AI SDK](./sdks/vercel-ai-sdk)
-- [Genkit](./sdks/genkit-sdk)
-- [Cloudflare Agents](./sdks/cloudflare-sdk)
+- <a href="https://auth0.com/ai/docs/javascript-sdk" newTab={false}>JavaScript</a>
+- <a href="https://auth0.com/ai/docs/python-sdk" newTab={false}>Python</a>
+- <a href="https://auth0.com/ai/docs/langchain-sdk" newTab={false}>LangChain</a>
+- <a href="https://auth0.com/ai/docs/llamaindex-sdk" newTab={false}>LlamaIndex</a>
+- <a href="https://auth0.com/ai/docs/vercel-ai-sdk" newTab={false}>Vercel AI SDK</a>
+- <a href="https://auth0.com/ai/docs/cloudflare-sdk" newTab={false}>Cloudflare Agents</a>
+- <a href="https://auth0.com/ai/docs/genkit-sdk" newTab={false}>Genkit</a>

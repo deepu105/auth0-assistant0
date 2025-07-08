@@ -35,11 +35,7 @@ Use the Google Auth Platform to:
 
 ### Configure Google consent screen
 
-:::note 
-
-If your application requests sensitive OAuth scopes or uses a custom image, [Google limits it to 100 logins until the OAuth consent screen is verified](https://developers.google.com/apps-script/guides/client-verification). Consent screen verification may take up to several days.
-
-:::
+Note: If your application requests sensitive OAuth scopes or uses a custom image, [Google limits it to 100 logins until the OAuth consent screen is verified](https://developers.google.com/apps-script/guides/client-verification). Consent screen verification may take up to several days.
 
 When you use OAuth 2.0 for authorization, your application requests authorization for one or more scopes of access from a Google Account. Google displays a consent screen to the user, including a summary of your project, its policies, and the requested access scopes.
 

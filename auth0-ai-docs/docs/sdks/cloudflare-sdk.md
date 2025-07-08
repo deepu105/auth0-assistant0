@@ -2,7 +2,7 @@
 id: cloudflare-sdk
 title: Cloudflare
 description: Learn how to use Auth for GenAI Cloudflare SDKs.
-slug: /sdks/cloudflare-sdk
+slug: /cloudflare-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # Cloudflare Agents SDKs & Samples
 
 Auth for GenAI Cloudflare SDK make it easy for developers to integrate with and secure any AI agent workflow using Cloudflare Agents.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ### [Auth0 AI for Cloudflare Agents](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-cloudflare)
 
@@ -37,6 +31,6 @@ npm install @auth0/ai-cloudflare
 
 Checkout our guides for Cloudflare Agents in TypeScript.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)

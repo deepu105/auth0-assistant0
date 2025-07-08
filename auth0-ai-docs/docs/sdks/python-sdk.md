@@ -2,7 +2,7 @@
 id: python-sdk
 title: Python
 description: Learn how to use Auth for GenAI Python SDKs.
-slug: /sdks/python-sdk
+slug: /python-sdk
 sidebar_position: 20
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # Python SDKs
 
 Auth0 Python SDK libraries make it easy for developers to integrate with and secure any AI agent workflow.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ## Auth0 SDKs
 
@@ -57,9 +51,9 @@ It exposes a simple `require_auth` dependency that checks if incoming requests h
 pip install auth0-fastapi-api
 ```
 
-## AI SDKs
+## Auth0 AI SDKs
 
-AI SDKs to streamline integrating your application with popular agentic frameworks:
+Auth0 AI SDKs to streamline integrating your application with popular agentic frameworks:
 
 ### [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-python)
 
@@ -85,6 +79,6 @@ Checkout our sample applications for Python built with frameworks like LangGraph
 
 Checkout our guides for LangChain and LlamaIndex in Python.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)

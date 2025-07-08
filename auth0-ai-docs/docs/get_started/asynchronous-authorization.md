@@ -24,12 +24,6 @@ When you add secure [human-in-the-loop approvals](https://sdk.vercel.ai/cookbook
 <!--emphasize it's agents working in the background-->
 By the end of this quickstart, you should have an AI agent integrated with the [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) that can request to buy stock on the user's behalf.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 <LanguageSelector>
   <Language id="js" name="Node.js" icon="js-clean.svg">
     <!--Next.js picker-->
@@ -105,9 +99,7 @@ Integrate the [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js) into your
 ### 1. Create your environment file
 In the root directory of your project, create the `.env` file and add the following variables. If you created an application with this quickstart, Auth0 automatically populates your environment variables for you:
 
-:::note
-Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
-:::
+Note: Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
 
 <EnvFileAsyncUserConfirm />
 

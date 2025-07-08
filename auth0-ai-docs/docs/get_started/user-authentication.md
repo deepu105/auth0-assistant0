@@ -26,12 +26,6 @@ By the end of this quickstart, you should have an application that can:
 - Sign up and log in using a username and password or a Google account.
 - Authenticate and authorize users using OAuth 2.0 and OpenID Connect.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 <LanguageSelector>
   <Language id="js" name="Next.js" icon="nextjs.svg">
 
@@ -120,11 +114,7 @@ Secure the application using the Auth0 Next.js SDK.
 ### 1. Create your environment file
 In the root directory of your project, create the `.env.local` file and add the following variables. If you created an application with this quickstart, Auth0 automatically populates your environment variables for you:
 
-:::note
-
-Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
-
-:::
+Note: Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
 
 <EnvFileUserAuth />
 
@@ -277,9 +267,7 @@ Secure the application using the Auth0 Python SDK.
 
 In the root directory of your project, create the `.env.local` file and add the following variables. If you created an application with this quickstart, Auth0 automatically populates your environment variables for you:
 
-:::note
-Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
-:::
+Note: Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
 
 <EnvFileUserAuth />
 

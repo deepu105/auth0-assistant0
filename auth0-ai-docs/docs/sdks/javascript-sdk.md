@@ -2,7 +2,7 @@
 id: javascript-sdk
 title: JavaScript
 description: Learn how to use Auth for GenAI JavaScript SDKs.
-slug: /sdks/javascript-sdk
+slug: /javascript-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # JavaScript SDKs
 
 Auth0 JavaScript SDK libraries make it easy for developers to integrate with and secure any AI agent workflow.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ## Auth0 SDKs
 
@@ -54,9 +48,9 @@ This SDK streamlines integrating Auth0 authentication and authorization services
 npm i @auth0/auth0-fastify
 ```
 
-## AI SDKs
+## Auth0 AI SDKs
 
-AI SDKs to streamline integrating your application with popular agentic frameworks:
+Auth0 AI SDKs to streamline integrating your application with popular agentic frameworks:
 
 ### [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js)
 
@@ -108,7 +102,7 @@ Checkout our sample applications for JavaScript/TypeScript built with frameworks
 
 Checkout our guides for Next.js, LangChain, LlamaIndex, Vercel AI, and Genkit in JavaScript/TypeScript.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
-- [Get Salesforce Opportunities](../get-salesforce-opportunities)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)
+- [Get Salesforce Opportunities](./get-salesforce-opportunities)

@@ -21,12 +21,6 @@ By the end of this quickstart, you should have an application integrated with Au
 1. Retrieve access tokens for a Google social connection.
 2. Integrate with an AI agent to call Google Calendar APIs.
 
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
-
 <LanguageSelector>
   <Language id="js" name="Next.js" icon="nextjs.svg">
 
@@ -282,10 +276,8 @@ Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-sa
 
   In the root directory of your project, create the `.env.local` file and add the following variables. If you created an application with this quickstart, Auth0 automatically populates your environment variables for you:
 
-  :::note
-  Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
-  :::
-
+  Note: Your application’s client secret is masked for you. To get the client secret value, click the copy button on the code sample.
+  
   <EnvFileUserAuth />
 
   To initialize your local Python environment, run these commands in the terminal:

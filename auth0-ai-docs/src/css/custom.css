@@ -95,7 +95,7 @@ h1:nth-of-type(1) {
 }
 
 p {
-  color: #ababab;
+  color: #cfcfcf;
   font-size: 1rem;
   line-height: 1.5rem;
 }
@@ -107,7 +107,7 @@ p {
 }
 
 .table-of-contents__link {
-  color: #ababab;
+  color: #cfcfcf;
   font-size: 0.8rem;
   margin-bottom: 0;
 }
@@ -216,7 +216,7 @@ a.pagination-nav__link {
   font-size: 0.8125rem;
   line-height: 1.25rem;
   font-family: 'Aeonik', Inter, Arial, Helvetica, sans-serif;
-  color: #ababab;
+  color: #cfcfcf;
 }
 
 .menu__list .menu__link--active {
@@ -351,7 +351,7 @@ h2::before {
 [class*='loginButton'] a {
   color: var(--ifm-navbar-link-color) !important;
   @media (max-width: 996px) {
-    color: #ababab !important;
+    color: #cfcfcf !important;
   }
 }
 
@@ -367,7 +367,7 @@ h2::before {
 [class*='details'] {
   padding: 0.5rem;
   background-color: #292929 !important;
-  border: 1px solid #ababab !important;
+  border: 1px solid #cfcfcf !important;
   --docusaurus-details-decoration-color: #555555 !important;
 }
 

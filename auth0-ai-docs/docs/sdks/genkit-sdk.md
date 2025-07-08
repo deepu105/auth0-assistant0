@@ -2,7 +2,7 @@
 id: genkit-sdk
 title: Genkit
 description: Learn how to use Auth for GenAI Genkit SDKs.
-slug: /sdks/genkit-sdk
+slug: /genkit-sdk
 sidebar_position: 22
 hide_table_of_contents: true
 ---
@@ -10,12 +10,6 @@ hide_table_of_contents: true
 # Genkit SDKs & Samples
 
 Auth for GenAI Genkit SDK make it easy for developers to integrate with and secure any AI agent workflow using Genkit.
-
-:::note
-
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-
-:::
 
 ### [Auth0 AI for Genkit](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-genkit)
 
@@ -39,6 +33,6 @@ Checkout our sample applications for Genkit.
 
 Checkout our guides for Genkit in TypeScript.
 
-- [Check Google Calendar Availability](../check-google-calendar-availability)
-- [List GitHub Repositories](../list-github-repositories)
-- [List Slack Channels](../list-slack-channels)
+- [Check Google Calendar Availability](./check-google-calendar-availability)
+- [List GitHub Repositories](./list-github-repositories)
+- [List Slack Channels](./list-slack-channels)

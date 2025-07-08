@@ -13,10 +13,6 @@ import Card from "@site/src/components/Card";
 
 Use the [Vercel AI SDK](https://sdk.vercel.ai/docs/introduction), OpenAI GPT-4, and the Auth0 Next.js SDK to create personalized Spotify playlists based on user input like mood, vibe, or activity.
 
-:::note
-We value your feedback! To ask questions, report issues, or request new frameworks and providers, connect with us on [GitHub](https://github.com/auth0/auth-for-genai).
-:::
-
 <Card headerText="Prerequisites">
 
 Before using this example, make sure you:
