@@ -6,6 +6,7 @@ import { SerpAPI } from '@langchain/community/tools/serpapi';
 import { GmailCreateDraft, GmailSearch } from '@langchain/community/tools/gmail';
 import { GoogleCalendarCreateTool, GoogleCalendarViewTool } from '@langchain/community/tools/google_calendar';
 
+import { getUserInfoTool } from './tools/user-info';
 import { getAccessToken, withGoogleConnection } from './auth0-ai';
 
 const AGENT_SYSTEM_TEMPLATE = `You are a personal assistant named Assistant0. You are a helpful assistant that can answer questions and help with tasks. You have access to a set of tools, use the tools as needed to answer the user's question. Render the email body as a markdown block, do not wrap it in code blocks.`;
@@ -34,6 +35,7 @@ const tools = [
   withGoogleConnection(new GmailCreateDraft(gmailParams)),
   withGoogleConnection(new GoogleCalendarCreateTool(googleCalendarParams)),
   withGoogleConnection(new GoogleCalendarViewTool(googleCalendarParams)),
+  getUserInfoTool,
 ];
 
 const checkpointer = new MemorySaver();

@@ -7,3 +7,9 @@ export const getRefreshToken = async () => {
   const session = await auth0.getSession();
   return session?.tokenSet?.refreshToken;
 };
+
+// Get the Access token from Auth0 session
+export const getAccessToken = async () => {
+  const session = await auth0.getSession();
+  return session?.tokenSet?.accessToken;
+};
