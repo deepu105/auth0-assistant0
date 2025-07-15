@@ -13,3 +13,8 @@ export const getAccessToken = async () => {
   const session = await auth0.getSession();
   return session?.tokenSet?.accessToken;
 };
+
+export const getUser = async () => {
+  const session = await auth0.getSession();
+  return session?.user;
+};
