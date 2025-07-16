@@ -49,7 +49,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <span className={`${robotoMono.className} text-white text-2xl`}>Assistant0</span>
                 <nav className="flex gap-1 flex-col md:flex-row">
                   <ActiveLink href="/">Chat</ActiveLink>
-                  {/* <ActiveLink href="/act">Interact //TODO</ActiveLink> */}
+                  <ActiveLink href="/documents">Documents</ActiveLink>
                 </nav>
               </div>
               <div className="flex justify-center">
@@ -70,7 +70,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
               <div className="absolute inset-0">{children}</div>
             </div>
           </div>
-          <Toaster />
+          <Toaster richColors />
         </NuqsAdapter>
       </body>
     </html>

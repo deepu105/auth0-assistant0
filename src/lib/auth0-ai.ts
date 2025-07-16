@@ -21,7 +21,7 @@ export const withAsyncAuthorization = auth0AI.withAsyncUserConfirmation({
   userID: async (_params, config) => {
     return config?.configurable?._credentials?.user?.sub;
   },
-  bindingMessage: async ({ product, qty }) => `Do you want to buy ${qty} of ${product}`,
+  bindingMessage: async ({ product, qty }) => `Do you want to buy ${qty} ${product}`,
   scopes: ['openid', 'product:buy'],
   audience: process.env['AUDIENCE']!,
 

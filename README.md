@@ -4,9 +4,11 @@ Assistant0 an AI personal assistant that consolidates your digital life by dynam
 
 1. **Gmail Integration:** The assistant can scan your inbox to generate concise summaries. It can highlight urgent emails, categorizes conversations by importance, and even suggests drafts for quick replies.
 2. **Calendar Management:** By interfacing with your calendar, it can remind you of upcoming meetings, check for scheduling conflicts, and even propose the best time slots for new appointments based on your availability.
-3. **Slack Notifications [coming soon]:** For team communications, the assistant can monitor Slack channels. It identifies key messages and creates action items, ensuring you never miss an important update from your colleagues.
-4. **Google Drive Access [coming soon]:** Whether you need immediate access to the latest project document or a file related to a current task, the assistant retrieves pertinent documents from Google Drive on demand. It can create document summaries and even create documents based on your instructions.
-5. **User Information Retrieval [coming soon]:** The assistant can retrieve information about the user from their authentication profile, including their name, email, and other relevant details.
+3. **User Information Retrieval:** The assistant can retrieve information about the user from their authentication profile, including their name, email, and other relevant details.
+4. **Online Shopping with Human-in-the-Loop Authorizations:** The assistant can make purchases on your behalf (using a fake API for demo purposes), with the ability to ask for human confirmation before finalizing transactions.
+5. **Document Upload and Retrieval:** The assistant can upload PDF and text documents to the database and retrieve them for context during chat. The docs can be shared with other users.
+6. **Slack Notifications [coming soon]:** For team communications, the assistant can monitor Slack channels. It identifies key messages and creates action items, ensuring you never miss an important update from your colleagues.
+7. **Google Drive Access [coming soon]:** Whether you need immediate access to the latest project document or a file related to a current task, the assistant retrieves pertinent documents from Google Drive on demand. It can create document summaries and even create documents based on your instructions.
 
 With tool-calling capabilities, the possibilities are endless. In this conceptual scenario, the AI agent embodies a digital personal secretary—one that not only processes information but also proactively collates data from connected services to provide comprehensive task management. This level of integration not only enhances efficiency but also ushers in a new era of intelligent automation, where digital assistants serve as reliable, all-in-one solutions that tailor themselves to your personal and professional needs.
 
@@ -55,11 +57,22 @@ cd auth0-assistant0
 
 Next, you'll need to set up environment variables in your repo's `.env.local` file. Copy the `.env.example` file to `.env.local`.
 
-You can setup a new Auth0 tenant with Token Vault enabled following the instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
-
 To start with the basic examples, you'll just need to add your OpenAI API key and Auth0 credentials.
+- To start with the examples, you'll just need to add your OpenAI API key and Auth0 credentials for the Web app and Machine to Machine App.
+  - You can setup a new Auth0 tenant with an Auth0 Web App and Token Vault following the Prerequisites instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
+  - You can setup a new Auth0 Machine to Machine App with Async Authorizations enabled following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
+  - An Auth0 FGA account, you can create one [here](https://dashboard.fga.dev). Add the FGA store ID, client ID, client secret, and API URL to the `.env.local` file.
+  - Optionally add a [SerpAPI](https://serpapi.com/) API key for using web search tool.
 
-Next, install the required packages using your preferred package manager (e.g. `bun install` or `npm install`).
+Next, install the required packages using your preferred package manager and initialize the database.
+
+```bash
+bun install # or npm install
+# start the postgres database
+docker compose up -d
+# create the database schema
+bun db:migrate # or npm run db:migrate
+```
 
 Now you're ready to run the development server:
 
