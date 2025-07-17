@@ -307,7 +307,7 @@ Start the application with `npm run dev`. Then, navigate to `http://localhost:30
 
 That's it! You successfully integrated external tool-calling into your project.
 
-Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/call-apis-on-user-behalf/others-api/vercel-ai-next-js).
+Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/call-apis-on-users-behalf/others-api/vercel-ai-next-js).
 
 ## Next steps
 
