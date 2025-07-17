@@ -49,7 +49,7 @@ npm install @auth0/ai-vercel@3 ai@4 @ai-sdk/openai@1 @ai-sdk/react@1 zod@3 googl
 
 Use the [Auth0 AI SDK](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-vercel) to get access tokens for third-party APIs.
 
-### 1. Set up Token Vault for Google Social Connection
+### Set up Token Vault for Google Social Connection
 
 Setup Auth0 AI SDK for Google Social Connection. This will allow you to get access tokens for Google Social Connection using [Token Vault](https://auth0.com/docs/secure/tokens/token-vault).
 
@@ -88,7 +88,7 @@ export const getRefreshToken = async () => {
 };
 ```
 
-### 2. Use access token to call APIs from a tool
+### Use access token to call APIs from a tool
 
 Once the user is authenticated, you can fetch an access token from the Token Vault using the Auth0 AI SDK. In this example, we fetch an access token for a Google social connection. Once you've obtained the access token for a social connection, you can use it with an AI agent to fetch data during a tool call and provide contextual data in its response.
 
@@ -158,7 +158,7 @@ You need to [obtain an API Key from OpenAI](https://platform.openai.com/api-keys
 OPENAI_API_KEY="YOUR_API_KEY"
 ```
 
-### 3. Add step up authorization
+## Add step up authorization
 
 Now when you try to use the tool, you will need to authorize additional scopes for Google that you have configured. We can achieve this using step up authorization.
 
@@ -252,7 +252,7 @@ export function ChatWindow(props: {
 }
 ```
 
-### 4. Add the tool to the AI agent
+## Add the tool to the AI agent
 
 Handle the interrupts from the Agent and call the tool from your AI app to get calendar events. Update the `/src/app/api/chat/route.ts` file with the following code:
 

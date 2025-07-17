@@ -106,7 +106,7 @@ The starter application is already configured to handle documents and embeddings
   - **Object**: select doc and add `<document name>` in the ID field
   - **Relation**: `viewer`
 
-### 1. Create a RAG tool
+### Create a RAG tool
 
 Define a RAG tool that uses the `FGAFilter` to filter authorized data from the vector database.
 
@@ -154,7 +154,7 @@ export const getContextDocumentsTool = tool({
 });
 ```
 
-### 2. Use the RAG tool from AI agent
+### Use the RAG tool from AI agent
 
 Call the tool from your AI agent to get data from documents. Update the `/src/app/api/chat/route.ts` file with the following code:
 

@@ -49,7 +49,7 @@ npm i @auth0/nextjs-auth0@4
 
 Secure the application using the Auth0 Next.js SDK.
 
-### 1. Create your environment file
+### Create your environment file
 
 In the root directory of your project, create the `.env.local` file and add the following variables. If you created an application with this quickstart, Auth0 automatically populates your environment variables for you:
 
@@ -61,7 +61,7 @@ AUTH0_CLIENT_ID='<your-auth0-application-client-id>'
 AUTH0_CLIENT_SECRET='<your-auth0-application-client-secret>'
 ```
 
-### 2. Create the Auth0 client
+### Create the Auth0 client
 
 Create a file at `src/lib/auth0.ts` and instantiate a new Auth0 client:
 
@@ -74,7 +74,7 @@ export const auth0 = new Auth0Client();
 
 The Auth0 client provides methods for handling authentication, sessions, and user data.
 
-### 3. Add the authentication middleware
+### Add the authentication middleware
 
 The middleware intercepts incoming requests and applies Auth0's authentication logic. Create the following file at `src/middleware.ts`:
 
@@ -114,7 +114,7 @@ export const config = {
 };
 ```
 
-### 4. Add Login and Sign up buttons
+### Add Login and Sign up buttons
 
 Update the `src/app/page.tsx` file to display content based on the user session:
 
@@ -163,7 +163,7 @@ export default async function Home() {
 
 The app displays the **Sign up** or **Log in** buttons without a user session. If a user session exists, the app displays a welcome message with the user's name.
 
-### 5. Add User Profile Dropdown (Optional)
+## Add User Profile Dropdown (Optional)
 
 If you are using the starter template, you can add a user profile dropdown to your application.
 

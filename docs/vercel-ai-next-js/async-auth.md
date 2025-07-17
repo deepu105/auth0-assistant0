@@ -48,7 +48,7 @@ npm install @auth0/ai-vercel@3 ai@4 @ai-sdk/openai@1 @ai-sdk/react@1 zod@3
 
 Integrate the Auth0 AI SDK into your application to secure your async AI agent workflow. For quickstart we will use a blocking request flow. In real use cases, often an asynchronous flow is preferred.
 
-### 1. Configure the Auth0 AI SDK
+### Configure the Auth0 AI SDK
 
 To require asynchronous authorization for your tool, the tool needs to be wrapped with the Async authorizer, `withAsyncUserConfirmation()`. Let's create a helper function to wrap the tool with the Async authorizer.
 
@@ -113,7 +113,7 @@ export const getUser = async () => {
 };
 ```
 
-### 2. Require async authorization for your tool
+### Require async authorization for your tool
 
 In this example, we wrap a tool that buys products on the user's behalf. When the user approves the transaction, the Auth0 AI SDK retrieves an access token to call the shop's API. Upon completing the CIBA flow, the AI agent responds with a message confirming the purchase.
 
@@ -175,7 +175,7 @@ export const shopOnlineTool = withAsyncAuthorization(
 );
 ```
 
-### 3. Update environment variables
+## Update environment variables
 
 You need to [obtain an API Key from OpenAI](https://platform.openai.com/api-keys) or another provider to use an LLM.
 
@@ -193,7 +193,7 @@ SHOP_API_URL=<your-shop-api-url>
 AUDIENCE=sample-shop-api
 ```
 
-### 4. Integrate the tool into an AI agent
+## Integrate the tool into an AI agent
 
 Call the tool from your AI app to make purchases. Update the `src/app/api/chat/route.ts` file with the following code:
 
@@ -242,7 +242,7 @@ export async function POST(req: NextRequest) {
 
 Start the application with `npm run dev`. Then, navigate to `http://localhost:3000`.
 
-Now ask the AI agent to buy a product, for example, "Buy an XYZ phone". Now, look for a push notification from the [Auth0 Guardian app](https://auth0.com/docs/mfa/auth0-guardian/user-enrollment) or your custom app integrated with the Auth0 Guardian SDK on your mobile device. Once you approve the notification, you should see the tool being executed and a response from the Agent.
+Now ask the AI agent to buy a product, for example, "Buy an XYZ phone". Now, look for a push notification from the [Auth0 Guardian app](https://auth0.com/docs/mfa/auth0-guardian/user-enrollment) or your custom app integrated with the [Auth0 Guardian SDK](https://auth0.com/docs/secure/multi-factor-authentication/auth0-guardian) on your mobile device. Once you approve the notification, you should see the tool being executed and a response from the Agent.
 
 Explore the [example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/async-authorization/vercel-ai-next-js).
 
