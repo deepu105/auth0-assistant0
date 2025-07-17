@@ -144,7 +144,7 @@ AI: You are Deepu Sasidharan. Here are your details: - .........
 
 That's it! You've successfully integrated first-party tool-calling into your project.
 
-Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/call-your-apis/next-js).
+Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/call-apis-on-user-behalf/your-api/vercel-ai-next-js).
 
 ## Next steps
 

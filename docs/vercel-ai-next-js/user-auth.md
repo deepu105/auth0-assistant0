@@ -217,7 +217,7 @@ You will see:
 - A **Sign up** and **Log in** button if the user is not authenticated.
 - A welcome message and user profile dropdown if the user is authenticated.
 
-Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/authenticate-users/next-js).
+Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/authenticate-users/vercel-ai-next-js).
 
 ## Next steps
 
