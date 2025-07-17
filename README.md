@@ -60,7 +60,6 @@ Next, you'll need to set up environment variables in your repo's `.env.local` fi
 To start with the basic examples, you'll just need to add your OpenAI API key and Auth0 credentials.
 - To start with the examples, you'll just need to add your OpenAI API key and Auth0 credentials for the Web app and Machine to Machine App.
   - You can setup a new Auth0 tenant with an Auth0 Web App and Token Vault following the Prerequisites instructions [here](https://auth0.com/ai/docs/call-others-apis-on-users-behalf).
-  - You can setup a new Auth0 Machine to Machine App with Async Authorizations enabled following the Prerequisites instructions [here](https://auth0.com/ai/docs/async-authorization).
   - An Auth0 FGA account, you can create one [here](https://dashboard.fga.dev). Add the FGA store ID, client ID, client secret, and API URL to the `.env.local` file.
   - Optionally add a [SerpAPI](https://serpapi.com/) API key for using web search tool.
 
@@ -82,7 +81,7 @@ bun all:dev # or npm run all:dev
 
 This will start an in-memory LangGraph server on port 54367 and a Next.js server on port 3000. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result! Ask the bot something and you'll see a streamed response:
 
-![A streaming conversation between the user and the AI](/public/images/home-page.png)
+![A streaming conversation between the user and the AI](./public/images/home-page.png)
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
