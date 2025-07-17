@@ -8,7 +8,7 @@ Auth for GenAI leverages [Auth0 FGA](https://auth0.com/fine-grained-authorizatio
 
 By the end of this quickstart, you should have a Next.js application that can:
 
-1. Retrieve authorized data as context for a RAG pipeline using Vercel AI.
+1. Retrieve authorized data as context for a RAG pipeline using LangChain.
 2. Use Auth0 FGA to determine if the user has authorization for the data.
 
 ## Prerequisites
@@ -25,21 +25,23 @@ Before getting started, make sure you:
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authenticate-users/vercel-ai-next-js
+cd auth0-ai-samples/authenticate-users/langchain-next-js
 ```
 
 ## Install dependencies
 
 In the root directory of your project, install the following dependencies:
 
-- `@auth0/ai-vercel`: [Auth0 AI SDK for Vercel AI](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-vercel) built for GenAI applications powered by the Vercel AI SDK.
-- `ai`: Core [Vercel AI SDK](https://sdk.vercel.ai/docs) module that interacts with various AI model providers.
-- `@ai-sdk/openai`: [OpenAI](https://sdk.vercel.ai/providers/ai-sdk-providers/openai) provider for the Vercel AI SDK.
-- `@ai-sdk/react`: [React](https://react.dev/) UI components for the Vercel AI SDK.
+- `@auth0/ai-langchain`: [Auth0 AI SDK for LangChain](https://github.com/auth0-lab/auth0-ai-js/tree/main/packages/ai-langchain) built for GenAI applications powered by LangChain.
+- `@langchain/langgraph`: For building stateful, multi-actor applications with LLMs.
+- `langchain`: The LangChain library.
+- `@langchain/core`: Core LangChain dependencies.
+- `@langchain/openai`: [OpenAI](https://js.langchain.com/docs/integrations/chat/openai) provider for LangChain.
 - `zod`: TypeScript-first schema validation library.
+- `langgraph-nextjs-api-passthrough`: API passthrough for LangGraph.
 
 ```bash
-npm install @auth0/ai-vercel@3 ai@4 @ai-sdk/openai@1 @ai-sdk/react@1 zod@3
+npm install @auth0/ai-langchain@3 @langchain/core@0.3 @langchain/langgraph@0.3 @langchain/openai@0.6 langchain@0.3 langgraph-nextjs-api-passthrough@0.1
 ```
 
 ## Set up an FGA Store
@@ -111,84 +113,103 @@ The starter application is already configured to handle documents and embeddings
 Define a RAG tool that uses the `FGAFilter` to filter authorized data from the vector database.
 
 ```tsx file=src/lib/tools/context-docs.ts
-import { tool } from 'ai';
+import { tool } from '@langchain/core/tools';
 import { z } from 'zod';
-import { FGAFilter } from '@auth0/ai';
+import { FGARetriever } from '@auth0/ai-langchain/RAG';
 
-import { findRelevantContent } from '@/lib/rag/embedding';
-import { auth0 } from '../auth0';
+import { getVectorStore } from '@/lib/rag/embedding';
 
-export type DocumentWithScore = {
-  content: string;
-  documentId: string;
-  similarity: number;
-};
-
-export const getContextDocumentsTool = tool({
-  description:
-    'Use the tool when user asks for documents or projects or anything that is stored in the knowledge base.',
-  parameters: z.object({
-    question: z.string().describe('the users question'),
-  }),
-  execute: async ({ question }) => {
-    const session = await auth0.getSession();
-    const user = session?.user;
+export const getContextDocumentsTool = tool(
+  async ({ question }, config) => {
+    const user = config?.configurable?._credentials?.user;
 
     if (!user) {
       return 'There is no user logged in.';
     }
 
-    const retriever = FGAFilter.create({
-      buildQuery: (doc: DocumentWithScore) => ({
+    const vectorStore = await getVectorStore();
+
+    if (!vectorStore) {
+      return 'There is no vector store.';
+    }
+
+    const retriever = FGARetriever.create({
+      retriever: vectorStore.asRetriever(),
+      buildQuery: (doc) => ({
         user: `user:${user?.email}`,
-        object: `doc:${doc.documentId}`,
+        object: `doc:${doc.metadata.documentId}`,
         relation: 'can_view',
       }),
     });
 
-    const documents = await findRelevantContent(question, 25);
     // filter docs based on FGA authorization
-    const context = await retriever.filter(documents);
-    return context;
+    const documents = await retriever.invoke(question);
+    return documents.map((doc) => doc.pageContent).join('\n\n');
   },
-});
+  {
+    name: 'get_context_documents',
+    description:
+      'Use the tool when user asks for documents or projects or anything that is stored in the knowledge base.',
+    schema: z.object({
+      question: z.string().describe('the users question'),
+    }),
+  },
+);
 ```
 
 ### Use the RAG tool from AI agent
 
-Call the tool from your AI agent to get data from documents. Update the `/src/app/api/chat/route.ts` file with the following code:
+Call the tool from your AI agent to get data from documents. First, update the `/src/app/api/chat/[..._path]/route.ts` file with the following code to pass the user credentials to your agent:
 
-```ts file=src/app/api/chat/route.ts
-//...
-import { getContextDocumentsTool } from '@/lib/tools/context-docs';
+```ts file=/src/app/api/chat/[..._path]/route.ts
+import { initApiPassthrough } from 'langgraph-nextjs-api-passthrough';
+
+import { getUser } from '@/lib/auth0';
+
+export const { GET, POST, PUT, PATCH, DELETE, OPTIONS, runtime } = initApiPassthrough({
+  apiUrl: process.env.LANGGRAPH_API_URL,
+  baseRoute: 'chat/',
+  bodyParameters: async (req, body) => {
+    if (req.nextUrl.pathname.endsWith('/runs/stream') && req.method === 'POST') {
+      return {
+        ...body,
+        config: {
+          configurable: {
+            _credentials: {
+              user: await getUser(),
+            },
+          },
+        },
+      };
+    }
+
+    return body;
+  },
+});
+```
+
+Next, add the following code to `src/lib/auth0.ts`:
+
+```tsx file=src/lib/auth0.ts
+//... existing code
+export const getUser = async () => {
+  const session = await auth0.getSession();
+  return session?.user;
+};
+```
+
+Now, update the `/src/lib/agent.ts` file with the following code to add the tool to your agent:
+
+```ts file=/src/lib/agent.ts
+import { getContextDocumentsTool } from './tools/context-docs';
 
 //... existing code
-export async function POST(req: NextRequest) {
-  //... existing code
-  const tools = {
-    getContextDocumentsTool,
-  };
 
-  return createDataStreamResponse({
-    execute: async (dataStream: DataStreamWriter) => {
-      const result = streamText({
-        model: openai('gpt-4o-mini'),
-        system: AGENT_SYSTEM_TEMPLATE,
-        messages,
-        maxSteps: 5,
-        tools,
-      });
-
-      result.mergeIntoDataStream(dataStream, {
-        sendReasoning: true,
-      });
-    },
-    onError: (err: any) => {
-      console.log(err);
-      return `An error occurred! ${err.message}`;
-    },
-  });
-}
+const tools = [
+  //... existing tools
+  getContextDocumentsTool,
+];
+//... existing code
 ```
 
 ## Test your application
@@ -202,12 +223,12 @@ docker compose up -d
 npm run db:migrate
 ```
 
-Start the application with `npm run dev`. Then, navigate to `http://localhost:3000`.
+Start the application with `npm run all:dev`. Then, navigate to `http://localhost:3000`.
 Upload a document from the documents tab and ask your AI Agent a question about the document! You should get a response with the relevant information. Now go to an incognito window and log in as a different user and try to ask the same question. You should not get a response. Now try sharing the document from the documents page to the second user and try again. You should see the information now.
 
 That's it! You successfully integrated RAG protected by Auth0 FGA into your project.
 
-Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/authorization-for-rag/vercel-ai-next-js).
+Explore [the example app on GitHub](https://github.com/auth0-samples/auth0-ai-samples/tree/main/authorization-for-rag/langchain-next-js).
 
 ## Next steps
 
