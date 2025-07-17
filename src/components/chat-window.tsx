@@ -10,7 +10,7 @@ import { useStream } from '@langchain/langgraph-sdk/react';
 import { type Message } from '@langchain/langgraph-sdk';
 
 import { FederatedConnectionInterruptHandler } from '@/components/auth0-ai/FederatedConnections/FederatedConnectionInterruptHandler';
-import { ChatMessageBubble } from '@/components/ChatMessageBubble';
+import { ChatMessageBubble } from '@/components/chat-message-bubble';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 

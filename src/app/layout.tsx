@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Github } from 'lucide-react';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-import { ActiveLink } from '@/components/Navbar';
+import { ActiveLink } from '@/components/navbar';
 import { Button } from '@/components/ui/button';
 import { Toaster } from '@/components/ui/sonner';
 import UserButton from '@/components/auth0/user-button';

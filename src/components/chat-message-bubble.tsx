@@ -1,7 +1,7 @@
 import { Message } from '@langchain/langgraph-sdk';
 
 import { cn } from '@/utils/cn';
-import { MemoizedMarkdown } from './MemoizedMarkdown';
+import { MemoizedMarkdown } from './memoized-markdown';
 
 export function ChatMessageBubble(props: { message: Message; aiEmoji?: string }) {
   return ['human', 'ai'].includes(props.message.type) && props.message.content.length > 0 ? (
