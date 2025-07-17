@@ -24,23 +24,23 @@ export const generateEmbeddings = async (value: string): Promise<Array<{ embeddi
   return embeddings.map((embedding, i) => ({ content: chunks[i].pageContent, embedding }));
 };
 
-// export const generateEmbedding = async (value: string): Promise<number[]> => {
-//   const input = value.replaceAll('\\n', ' ');
-//   const embedding = await embeddingModel.embedQuery(input);
-//   return embedding;
-// };
+export const generateEmbedding = async (value: string): Promise<number[]> => {
+  const input = value.replaceAll('\\n', ' ');
+  const embedding = await embeddingModel.embedQuery(input);
+  return embedding;
+};
 
-// export const findRelevantContent = async (userQuery: string, limit = 4) => {
-//   const userQueryEmbedded = await generateEmbedding(userQuery);
-//   const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, userQueryEmbedded)})`;
-//   const similarGuides = await db
-//     .select({ content: embeddings.content, similarity, documentId: embeddings.documentId })
-//     .from(embeddings)
-//     .where(gt(similarity, 0.5))
-//     .orderBy((t: any) => desc(t.similarity))
-//     .limit(limit);
-//   return similarGuides;
-// };
+export const findRelevantContent = async (userQuery: string, limit = 4) => {
+  const userQueryEmbedded = await generateEmbedding(userQuery);
+  const similarity = sql<number>`1 - (${cosineDistance(embeddings.embedding, userQueryEmbedded)})`;
+  const similarGuides = await db
+    .select({ content: embeddings.content, similarity, documentId: embeddings.documentId })
+    .from(embeddings)
+    .where(gt(similarity, 0.5))
+    .orderBy((t: any) => desc(t.similarity))
+    .limit(limit);
+  return similarGuides;
+};
 
 const DATABASE_URL = process.env.DATABASE_URL!;
 const dbUrl = new URL(DATABASE_URL);
