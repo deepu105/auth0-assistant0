@@ -27,7 +27,7 @@ Before getting started, make sure you have completed the following steps:
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authenticate-users/next-js
+cd auth0-ai-samples/authenticate-users/vercel-ai-next-js
 ```
 
 ## Install dependencies
@@ -201,12 +201,12 @@ export function FederatedConnectionInterruptHandler({ interrupt }: FederatedConn
 }
 ```
 
-Now update the `src/components/ChatWindow.tsx` file to include the FederatedConnectionInterruptHandler component:
+Now update the `src/components/chat-window.tsx` file to include the FederatedConnectionInterruptHandler component:
 
-```tsx file=src/components/ChatWindow.tsx
+```tsx file=src/components/chat-window.tsx
 //...
 import { useInterruptions } from '@auth0/ai-vercel/react';
-import { FederatedConnectionInterruptHandler } from '@/components/auth0-ai/FederatedConnectionInterruptHandler';
+import { FederatedConnectionInterruptHandler } from '@/components/auth0-ai/FederatedConnections/FederatedConnectionInterruptHandler';
 
 
 //... existing code
@@ -260,13 +260,14 @@ Handle the interrupts from the Agent and call the tool from your AI app to get c
 //...
 import { setAIContext } from '@auth0/ai-vercel';
 import { errorSerializer, withInterruptions } from '@auth0/ai-vercel/interrupts';
-import { checkUsersCalendarTool } from '@/lib/tools/google-calender';
+import { checkUsersCalendarTool } from '@/lib/tools/google-calendar';
 //... existing code
 
 export async function POST(req: NextRequest) {
-  const { id, messages }: { id: string; messages: Array<Message>; selectedChatModel: string } = await req.json();
+  const request = await req.json();
+  const messages = sanitizeMessages(request.messages);
 
-  setAIContext({ threadID: id });
+  setAIContext({ threadID: request.id });
 
   const tools = {
     checkUsersCalendarTool,

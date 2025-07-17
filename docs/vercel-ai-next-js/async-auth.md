@@ -27,7 +27,7 @@ Before getting started, make sure you have completed the following steps:
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authenticate-users/next-js
+cd auth0-ai-samples/authenticate-users/vercel-ai-next-js
 ```
 
 ## Install dependencies
@@ -188,16 +188,16 @@ Update the `.env.local` file with the following variables:
 # You can use any provider of your choice supported by Vercel AI
 OPENAI_API_KEY="YOUR_API_KEY"
 
-# API
+# API (OPTIONAL)
 SHOP_API_URL=<your-shop-api-url>
 AUDIENCE=sample-shop-api
 ```
 
 ### 4. Integrate the tool into an AI agent
 
-Call the tool from your AI app to make purchases. Update the `/src/app/api/chat/route.ts` file with the following code:
+Call the tool from your AI app to make purchases. Update the `src/app/api/chat/route.ts` file with the following code:
 
-```ts file=src/index.ts
+```ts file=src/app/api/chat/route.ts
 //...
 import { setAIContext } from '@auth0/ai-vercel';
 
@@ -205,9 +205,11 @@ import { shopOnlineTool } from '@/lib/tools/shop-online';
 
 //...
 export async function POST(req: NextRequest) {
-  const { id, messages }: { id: string; messages: Array<Message>; selectedChatModel: string } = await req.json();
+  const request = await req.json();
 
-  setAIContext({ threadID: id });
+  const messages = sanitizeMessages(request.messages);
+
+  setAIContext({ threadID: request.id });
 
   const tools = {
     shopOnlineTool,
@@ -227,12 +229,13 @@ export async function POST(req: NextRequest) {
         sendReasoning: true,
       });
     },
-    onError: (err: unknown) => {
+    onError: (err: any) => {
       console.log(err);
-      return 'Oops, an error occured!';
+      return `An error occurred! ${err.message}`;
     },
   });
 }
+//...
 ```
 
 ## Test the application

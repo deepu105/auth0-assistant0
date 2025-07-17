@@ -25,7 +25,7 @@ Before getting started, make sure you:
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authorization-for-rag/vercel-ai-next-js-starter
+cd auth0-ai-samples/authenticate-users/vercel-ai-next-js
 ```
 
 ## Install dependencies

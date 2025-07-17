@@ -28,7 +28,7 @@ Use a starter template or create a Next.js web application using Next.js version
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authenticate-users/next-js-starter
+cd auth0-ai-samples/authenticate-users/vercel-ai-next-js-starter
 ```
 
 Else, create a new application using [create-next-app](https://nextjs.org/docs/app/getting-started/installation):

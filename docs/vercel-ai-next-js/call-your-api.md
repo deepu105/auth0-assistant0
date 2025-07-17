@@ -27,7 +27,7 @@ Before getting started, make sure you have completed the following steps:
 
 ```bash
 git clone https://github.com/auth0-samples/auth0-ai-samples.git
-cd auth0-ai-samples/authenticate-users/next-js
+cd auth0-ai-samples/authenticate-users/vercel-ai-next-js
 ```
 
 ## Install dependencies
@@ -90,7 +90,8 @@ import { getUserInfoTool } from '@/lib/tools/user-info';
 //... existing code
 
 export async function POST(req: NextRequest) {
-  const { id, messages }: { id: string; messages: Array<Message>; selectedChatModel: string } = await req.json();
+  const request = await req.json();
+  const messages = sanitizeMessages(request.messages);
 
   const tools = {
     getUserInfoTool,
@@ -110,12 +111,13 @@ export async function POST(req: NextRequest) {
         sendReasoning: true,
       });
     },
-    onError: (err: unknown) => {
+    onError: (err: any) => {
       console.log(err);
-      return 'Oops, an error occured!';
+      return `An error occurred! ${err.message}`;
     },
   });
 }
+//... existing code
 ```
 
 You need an API Key from Open AI or another provider to use an LLM. Add that API key to your `.env.local` file:
